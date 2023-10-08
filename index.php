@@ -17,7 +17,13 @@
 get_header(); 
 ?>
 
+<?php $window_width = "<script type='text/javascript'>document.write(window.innerWidth);</script>"; ?>
+
 <?php get_template_part("nav"); ?>
+
+<?php get_template_part("about"); ?>
+
+<?php get_template_part("categories") ?>
 
 <?php
     $the_query = new WP_Query( 
@@ -36,9 +42,32 @@ get_header();
         while ( $the_query->have_posts() ) {
             $the_query->the_post();
             ?>
-            <div class="post-container post-<?php echo $the_query->current_post + 1; ?>">
-                <h1><?php echo get_the_title() ?></h1>
-                <p><?php echo $the_query->current_post; ?></p>
+            <div class="post-container">
+
+            <?php 
+
+            $image = wp_get_attachment_image_src(get_field('square_thumbnail'), 'large');
+            $image = $image[0];
+            $ext = pathinfo($image, PATHINFO_EXTENSION);
+
+            if( $ext == 'gif' )
+            {
+                $image = wp_get_attachment_image_src(get_field('square_thumbnail'), 'full');
+                $image = $image[0];
+            }
+
+            ?>
+            <img src="<?php echo $image; ?>" alt="" />
+
+            <!-- <?php 
+                $attachment_id = get_field('square_thumbnail');
+                $img_src = wp_get_attachment_image_url( $attachment_id, 'full' );
+                $img_srcset = wp_get_attachment_image_srcset( $attachment_id, 'medium' );
+                ?>
+                <img src="<?php echo esc_url( $img_src ); ?>"
+                    srcset="<?php echo esc_attr( $img_srcset ); ?>"
+                    sizes="(max-width: 50em) 87vw, 680px" alt="A rad wolf"
+                > -->
             </div>
             <?php
         }

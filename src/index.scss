@@ -1,6 +1,8 @@
 @import './vars.scss';
 @import './nav.scss';
 @import './grid.scss';
+@import './about.scss';
+@import './cat.scss';
 
 
 html {
@@ -15,11 +17,10 @@ body {
     width: 100%;
 }
 
-
 #container {
     width: 100%;
     margin: 0;
     padding: 0;
     position: relative;
-    margin-top: var(--wp-admin--admin-bar--height, -20px);
+    margin-top: var(--wp-admin--admin-bar--height, 0px);
 }

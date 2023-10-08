@@ -4,17 +4,27 @@
     justify-content: center;
     align-items: center;
     position: absolute;
-    top: 5px;
-    left: 5px;
+    top: 10px;
+    left: 10px;
 }
 
 .nav-icons {
-    width: 25px;
-    height: 25px;
+    width: 35px;
+    height: 35px;
     background: $white-fade;
     border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 10px;
 
     svg {
-        width: 60%;
+        width: 65%;
+        fill: $background;
     }
+}
+
+.nav-icons-close {
+    display: none;
 }
