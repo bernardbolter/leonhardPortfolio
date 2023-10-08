@@ -42,7 +42,7 @@ get_header();
         while ( $the_query->have_posts() ) {
             $the_query->the_post();
             ?>
-            <div class="post-container">
+            <a class="post-container" href="<?php the_permalink() ?>">
 
             <?php 
 
@@ -68,7 +68,7 @@ get_header();
                     srcset="<?php echo esc_attr( $img_srcset ); ?>"
                     sizes="(max-width: 50em) 87vw, 680px" alt="A rad wolf"
                 > -->
-            </div>
+            </a>
             <?php
         }
         /* Restore original Post Data */

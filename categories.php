@@ -12,6 +12,9 @@
 
 <div class="cat-container cat-no-show" id="cat-section">
     <h1>CATEGORIES</h1>
+    <div class="category">
+        <a href="<?php get_template_directory_uri() ?>">all</a>
+    </div>
     <?php
     $categories = get_categories(['hide_empty' => false]);
         foreach($categories as $category) {
