@@ -1,6 +1,20 @@
+.nav-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
 
-.nav {
-    display: block;
-    background: purple;
-    font-family: $font;
+.nav-icons {
+    width: 25px;
+    height: 25px;
+    background: $white-fade;
+    border-radius: 50%;
+
+    svg {
+        width: 60%;
+    }
 }

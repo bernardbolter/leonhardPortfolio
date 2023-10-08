@@ -21,4 +21,3 @@
 
 <body>
     <div id="container">
-    <h1>Header</h1>

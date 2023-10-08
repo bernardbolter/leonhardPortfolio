@@ -17,7 +17,44 @@
 get_header(); 
 ?>
 
-<h1>INDEX</h1>
+<?php get_template_part("nav"); ?>
+
+<?php
+    $the_query = new WP_Query( 
+        array( 
+            'post_type' => 'post',
+            'orderby' => 'rand',
+            'posts_per_page' => '-1' 
+    ));
+
+    // The Loop
+    if ( $the_query->have_posts() ) {
+        ?>
+            <div class="posts-container">
+        <?php
+
+        while ( $the_query->have_posts() ) {
+            $the_query->the_post();
+            ?>
+            <div class="post-container post-<?php echo $the_query->current_post + 1; ?>">
+                <h1><?php echo get_the_title() ?></h1>
+                <p><?php echo $the_query->current_post; ?></p>
+            </div>
+            <?php
+        }
+        /* Restore original Post Data */
+        wp_reset_postdata();
+        ?>
+        </div>
+        <?php
+    } else {
+        ?>
+        <div class="no-posts-container">
+            <h1>There are no posts</h1>
+        </div>
+        <?php
+    }
+?>
 
 <?php
 get_footer();

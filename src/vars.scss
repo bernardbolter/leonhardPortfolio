@@ -1,7 +1,7 @@
 @font-face {
     font-family: 'helvetica_neue_lt_pro56It';
-    src: url('helveticaneueltpro-it-webfont.woff2') format('woff2'),
-         url('helveticaneueltpro-it-webfont.woff') format('woff');
+    src: url('./fonts/helveticaneueltpro-it-webfont.woff2') format('woff2'),
+         url('./fonts/helveticaneueltpro-it-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 
@@ -10,8 +10,8 @@
 
 @font-face {
     font-family: 'helvetica_neue_lt_pro55_roman';
-    src: url('helveticaneueltpro-roman-webfont.woff2') format('woff2'),
-         url('helveticaneueltpro-roman-webfont.woff') format('woff');
+    src: url('./fonts/helveticaneueltpro-roman-webfont.woff2') format('woff2'),
+         url('./fonts/helveticaneueltpro-roman-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 
@@ -19,3 +19,4 @@
 
 $italic: "helvetica_neue_lt_pro56It", sans-serif;
 $font: "helvetica_neue_lt_pro55_roman", sans-serif;
+$white-fade: rgba(255,255,255, .4);
