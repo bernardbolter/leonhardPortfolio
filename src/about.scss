@@ -1,9 +1,28 @@
 .about-container {
-    width: 200px;
-    background: rgba(255,255,255,.5);
+    width: 96%;
+    background: rgba(255,255,255,.85);
     position: absolute;
-    top: 50px;
-    left: 10px;
+    top: 55px;
+    left: 2%;
+    border-radius: 15px;
+
+    @media screen and (min-width: $breakpoint) {
+        width: 400px;
+        left: 20px;
+    }
+
+    h2 {
+        color: $dark-text;
+        font-size: 12px;
+        margin: 10px 10px 0;
+        padding: 0;
+    }
+
+    p {
+        font-size: 11px;
+        color: $light-text;
+        margin: 0 0 25px 10px;
+    }
 }
 
 .about-no-show {

@@ -11,5 +11,9 @@
 ?>
 
 <div class="about-container about-no-show" id="about-section">
-    <h1>ABOUT</h1>
+    <h2><?php the_field('description', 104); ?></h2>
+    <p>About</p>
+    <h2><?php the_field('services', 104); ?></h2>
+    <p>Services</p>
+    <h2>Current Time: </h2>
 </div>

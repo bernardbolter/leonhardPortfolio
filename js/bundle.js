@@ -30,3 +30,10 @@ jQuery(document).ready(function($) {
 jQuery(document).ready(function($) {
     console.log('script loaded yeah')
   })
+$(document).ready(function() {
+    setInterval(timestamp, 1000);
+});
+
+function timestamp() {
+    console.log("time")
+}
