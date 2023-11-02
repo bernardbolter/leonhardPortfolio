@@ -25,6 +25,9 @@ gulp.task('css', function(cb) {
 
 gulp.task('js', function(done) {
     return gulp.src(css.JSsrc)
+    // .pipe(babel({
+    //     presets: ['@babel/env']
+    // }))
     .pipe(concat('bundle.js'))
     .pipe(gulp.dest(css.JSbuild))
 })

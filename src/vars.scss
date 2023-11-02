@@ -7,7 +7,6 @@
 
 }
 
-
 @font-face {
     font-family: 'helvetica_neue_lt_pro55_roman';
     src: url('./fonts/helveticaneueltpro-roman-webfont.woff2') format('woff2'),
@@ -20,7 +19,9 @@
 $italic: "helvetica_neue_lt_pro56It", sans-serif;
 $font: "helvetica_neue_lt_pro55_roman", sans-serif;
 $white-fade: rgba(255,255,255, .6);
-$background: #323212;
-$breakpoint: 700px;
+$background: #212121;
+$breakpoint: 850px;
 $dark-text: rgba(0,0,0, .7);
 $light-text: rgba(0,0,0, .5);
+$white-text: rgba(255,255,255.8);
+$nav-back: #D9D9D9;

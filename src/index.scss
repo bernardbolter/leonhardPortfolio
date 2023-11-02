@@ -3,6 +3,7 @@
 @import './grid.scss';
 @import './about.scss';
 @import './cat.scss';
+@import './project.scss';
 
 
 html {
@@ -17,6 +18,7 @@ body {
     position: absolute;
     top: 0;
     width: 100%;
+    background: $background;
 }
 
 #container {
@@ -25,4 +27,39 @@ body {
     padding: 0;
     position: relative;
     margin-top: var(--wp-admin--admin-bar--height, 0px);
+}
+
+.loading-container  {
+    background: linear-gradient(270deg, #b7caca, #3e3f3f, #6c6e6e);
+    background-size: 600% 600%;
+    -webkit-animation: AnimationName 30s ease infinite;
+    -moz-animation: AnimationName 30s ease infinite;
+    -o-animation: AnimationName 30s ease infinite;
+    animation: AnimationName 30s ease infinite;
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+@-webkit-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-moz-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-o-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
 }

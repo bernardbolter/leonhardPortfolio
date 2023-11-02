@@ -15,7 +15,10 @@
   ],
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.23.2",
+    "@babel/preset-env": "^7.23.2",
     "autoprefixer": "^10.4.16",
+    "gulp-babel": "^8.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-postcss": "^9.0.1",
     "gulp-sass": "^5.1.0"

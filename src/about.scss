@@ -5,6 +5,8 @@
     top: 55px;
     left: 2%;
     border-radius: 15px;
+    max-width: 400px;
+    padding: 10px 5px 20px;
 
     @media screen and (min-width: $breakpoint) {
         width: 400px;
@@ -27,4 +29,38 @@
 
 .about-no-show {
     display: none;
+}
+
+.services-container p {
+    color: $dark-text;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0 0 0 10px;
+}
+
+.services-container br {
+    display: none;
+
+    @media screen and (min-width: $breakpoint) {
+        display: block;
+     }
+}
+
+.clients-container p {
+    color: $dark-text;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0 0 0 10px;
+}
+
+.clients-container br {
+    display: none;
+
+    @media screen and (min-width: $breakpoint) {
+        display: block;
+     }
+}
+
+.clock-container {
+    margin: 0 0 0 10px !important;
 }
