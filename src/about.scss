@@ -7,6 +7,10 @@
     border-radius: 15px;
     max-width: 400px;
     padding: 10px 5px 20px;
+    z-index: 999;
+    opacity: 1;
+    visibility: visible;
+    transition: z-index .7s step-start, visibility 0s, opacity .7s ease-in-out;
 
     @media screen and (min-width: $breakpoint) {
         width: 400px;
@@ -28,7 +32,10 @@
 }
 
 .about-no-show {
-    display: none;
+    visibility: 0;
+    opacity: 0;
+    z-index: -10;
+    transition: z-index .7s step-end, opacity .7s, visibility 0s ease-in-out;
 }
 
 .services-container p {

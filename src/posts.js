@@ -2,7 +2,6 @@ var allPosts = [];
 var filteredPosts = [];
 var breakpoint = 850;
 var postsHTML = document.getElementById('posts')
-var currentWidth = 0;
 
 jQuery(document).ready(function($) {
     async function newPosts() {
@@ -12,7 +11,9 @@ jQuery(document).ready(function($) {
         filteredPosts = allPosts
         displayAllPosts(filteredPosts)
     }
-    newPosts()
+    if(document.getElementById("posts") !== null) {
+        newPosts()
+    }
 })
 
 
@@ -28,10 +29,6 @@ jQuery(window).resize(function() {
         jQuery(this).trigger('resizeEnd');
     }, 500);
 });
-
-const selectedPostToFront = posts => {
-
-}
 
 const displayAllPosts = (posts) => {
     // shuffledPosts = shuffle(posts)

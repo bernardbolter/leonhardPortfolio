@@ -11,11 +11,12 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    margin: 10px 0 0 10px;
 }
 
 .project-back {
-    width: 42px;
-    height: 42px;
+    width: 35px;
+    height: 35px;
 
     svg {
         width: 100%;
@@ -23,22 +24,24 @@
     }
 }
 
+.back-circle {
+    fill: $white-fade;
+}
+
 .project-title {
-    height: 42px;
+    height: 35px;
     padding: 0 15px;
-    background: $nav-back;
-    border-radius: 21px;
+    background: $white-fade;
+    border-radius: 18px;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0 0 0 10px;
     cursor: pointer;
-
-    h1 {
-        font-family: $font;
-        font-size: 15px;
-        color: $background;
-    }
+    font-family: $font;
+    font-size: 14px;
+    color: $background;
+    font-weight: 600;        
 }
 
 .project-title-hide {
@@ -53,8 +56,8 @@
 }
 
 .project-thumb {
-    width: 42px;
-    height: 42px;
+    width: 35px;
+    height: 35px;
     margin:  0 0 0 10px;
 
     img {
@@ -66,12 +69,12 @@
 }
 
 .project-thumb-loader {
-    width: 42px;
-    height: 42px;
+    width: 35px;
+    height: 35px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: $nav-back;
+    background: $white-fade;
     border-radius: 21px;
     margin-left: 5px;
 
@@ -125,19 +128,16 @@
 }
 
 .project-info-close {
-    width: 42px;
-    height: 42px;
+    width: 18px;
+    height: 18px;
     border-radius: 21px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: $nav-back;
+    background: $white-fade;
     cursor: pointer;
     margin: 0 0 0 10px;
-
-    svg {
-        width: 55%;
-    }
+    padding: 9px;
 }
 
 .project-info-close-hide {
@@ -147,7 +147,6 @@
 .project-container {
     width: 100%;
     height: 100vh;
-    z-index: -1;
     top: 0;
     left: 0;
     overflow: hidden;
