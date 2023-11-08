@@ -11,7 +11,7 @@ get_header(); ?>
     <div class="projects-wrapper">
     <input type="hidden" id="post_id" value="<?php the_ID() ?>">
         <div id="projects-container">
-            <div class="project-title-container">
+            <div class="project-container">
                 <a href="/" class="project-back">
                     <svg viewBox="0 0 42 42">
                         <circle class="back-circle" cx="21" cy="21" r="21" />
@@ -33,10 +33,8 @@ get_header(); ?>
                     </div>
                 </div>
             </div>
-            <div class="project-loading-content">
-                <div class="loading-container">
-                    <h1>LOADING PORTFOLIO...</h1>
-                </div>
+            <div class="loading-container">
+                <h1>LOADING PORTFOLIO...</h1>
             </div>
         </div>
     </div>

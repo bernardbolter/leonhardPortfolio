@@ -151,15 +151,14 @@ function shuffle(array) {
   }
 
 
+// variable for array of projects with project that was clicked on at the top
 var sortedProjects = []
-var filteredProjects = []
 
-var theHTML = ''
-
+// rebuild assets on resize
 jQuery(window).bind('resizeEnd', function() {
   //do something, window hasn't changed size in 500ms
   console.log("resized")
-  buildProjectsAssets(filteredProjects);
+  buildProjectsAssets(sortedProjects);
 });
 
 jQuery(window).resize(function() {
@@ -176,53 +175,15 @@ jQuery(document).ready(function($) {
     async function getProjectData(post_id) {
       var projectData = await wp.apiRequest({ path: 'wp/v2/posts?acf_format=standard&per_page=100' })
       var currentProject = projectData.filter(project => project.id === parseInt(post_id))
-      filteredProjects = projectData.filter(project => project.id !== parseInt(post_id))
-      filteredProjects.unshift(currentProject[0])
-      console.log(filteredProjects)
-      buildProjectsAssets(filteredProjects)
+      sortedProjects = projectData.filter(project => project.id !== parseInt(post_id))
+      sortedProjects.unshift(currentProject[0])
+      console.log(sortedProjects)
+      buildProjectsAssets(sortedProjects)
 
     }
     if (post_id !== undefined) {
       getProjectData(post_id)
     }
-
-
-
-    var buildThumbNav = (data) => {
-      console.log(data)
-      projectItems = projectItems + '<div class="project-items">'
-      for (var i = 1; i < 4; i++) {
-        var newThumb
-        var newImage
-        if (data[0].acf[`portfolio_image_${i}`] === false) {
-          console.log("false")
-          newThumb = data[0].acf[`portfolio_thumbnail_${i}`].sizes.thumbnail
-          newImage = data[0].acf[`portfolio_video_${i}`].url
-          projectItems = projectItems + `<div class="project-item"><video autoplay muted loop><source src="${newImage}"></div>`
-        } else {
-          console.log("true")
-          newThumb = data[0].acf[`portfolio_image_${i}`].sizes.thumbnail
-          newImage = data[0].acf[`portfolio_image_${i}`].sizes.large
-          projectItems = projectItems + `<div class="project-item"><img src="${newImage}"></div>`
-        }
-        projectThumbs = projectThumbs + `<div id="project-thumb-${i}" class="project-thumb"><img src="${newThumb}" alt="project thumbail" /></div>`
-      }
-      console.log(projectItems)
-      projectItems = projectItems + '</div>'
-      $('#project-thumbnails').html(projectThumbs)
-      $('#project-container').html(projectItems)
-    }
-
-    // show/hide project info
-    var projectCloseEl = document.getElementById('project-info-close');
-    if (projectCloseEl) {
-      projectCloseEl.addEventListener('click', function() {
-        $('#project-info-container').addClass('project-info-container-hide');
-        $('#project-title').removeClass('project-title-hide');
-        $('#project-info-close').addClass('project-info-close-hide');
-      })
-    }
-
 
     // show project info
     $(document).on('click', '.project-title', function(e) {
@@ -233,9 +194,10 @@ jQuery(document).ready(function($) {
       $(info).removeClass('project-info-container-hide')
       var close = `#project-info-close-${id}`
       $(close).removeClass('project-info-close-hide')
+      $(`#project-thumbnails-${id}`).css("left", "92px")
     })
 
-    // hide project info
+    // hide project info - click on outer svg
     $(document).on('click', '.project-info-close', function(e) {
       var id = e.target.id.slice(-3)
       var title = `#project-title-${id}`
@@ -244,60 +206,164 @@ jQuery(document).ready(function($) {
       $(info).addClass('project-info-container-hide')
       var close = `#project-info-close-${id}`
       $(close).addClass('project-info-close-hide')
+      var titleWidth = jQuery(`#project-title-${id}`).width()
+      $(`#project-thumbnails-${id}`).css("left", `${titleWidth + 86}px`)
     })
 
-    var projectTitleEl = document.getElementById('project-title');
-    if (projectTitleEl && projectCloseEl) {
-      projectTitleEl.addEventListener('click', function() {
-        $('#project-info-container').removeClass('project-info-container-hide');
-        $('#project-title').addClass('project-title-hide');
-        $('#project-info-close').removeClass('project-info-close-hide');
-      })
-    }
+    // hide project info - click on path
+    $(document).on('click', '.project-info-close-path', function(e) {
+      var id = e.target.id.slice(-3)
+      var title = `#project-title-${id}`
+      $(title).removeClass('project-title-hide')
+      var info = `#project-info-${id}`
+      $(info).addClass('project-info-container-hide')
+      var close = `#project-info-close-${id}`
+      $(close).addClass('project-info-close-hide')
+      var titleWidth = jQuery(`#project-title-${id}`).width()
+      $(`#project-thumbnails-${id}`).css("left", `${titleWidth + 86}px`)
+    })
 })
 
 var buildProjectsAssets = projects => {
-  var allProjects = ''
-  console.log('build Ps: ', projects)
-  var sortedNavs = createProjectNavs(projects)
-  console.log(sortedNavs)
-  allProjects = sortedNavs.join()
-  console.log("all: ", allProjects)
-  // for (i = 0; i < sortedNavs.length; i++) {
-  //   console.log(sortedNavs[i])
-  //   allProjects = allProjects + sortedNavs[i]
-  // }
-  // console.log("all: ", allProjects)
+  // get all project HTML back as an array of strings
+  var projectAssets = createProjectAssets(projects)
+  // join all HTM into one string
+  var allProjects = projectAssets.join('')
+  console.log("all assets: ", allProjects)
   var container = document.getElementById('projects-container')
+  // inject into page
   if (container) {
-    console.log('passed container')
     jQuery('#projects-container').html(allProjects)
+    console.log("win width: ", jQuery(window).width())
+    if (jQuery(window).width() > 850) {
+      projects.map(project => {
+        var id = project.id
+        var titleWidth = jQuery(`#project-title-${id}`).width()
+        jQuery(`#project-thumbnails-${id}`).css("left", `${titleWidth + 86}px`)
+      })
+    }
   }
 }
 
-var createProjectNavs = projects => {
-  var newNavs = []
+var createProjectAssets = projects => {
+  var newAssetsString = []
   projects.forEach(project => {
 
-    var titleInfo = `<div class='project-container'><div class='project-title-container' id='project-${project.id}'>`
+    // add project container
+    var newAssets = `<div class='project-container' id='project-${project.id}'>`
+
     // add back button
-    titleInfo = titleInfo + `<a href='/' class="project-back"><svg viewBox="0 0 42 42"><circle class="back-circle" cx="21" cy="21" r="21" /><path d="M24 13L16 21L24 29" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>`
+    newAssets = newAssets + `<a href='/' class="project-back"><svg viewBox="0 0 42 42"><circle class="back-circle" cx="21" cy="21" r="21" /><path d="M24 13L16 21L24 29" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>`
     // add title button
-    titleInfo = titleInfo + `<div id="project-title-${project.id}" class="project-title">${project.title.rendered}</div>`
+    newAssets = newAssets + `<div id="project-title-${project.id}" class="project-title">${project.title.rendered}</div>`
     // add close button
-    titleInfo = titleInfo + `<svg id="project-info-close-${project.id}" class="project-info-close project-info-close-hide" viewBox="0 0 24 24"> <path d="M20.7457 3.32851C20.3552 2.93798 19.722 2.93798 19.3315 3.32851L12.0371 10.6229L4.74275 3.32851C4.35223 2.93798 3.71906 2.93798 3.32854 3.32851C2.93801 3.71903 2.93801 4.3522 3.32854 4.74272L10.6229 12.0371L3.32856 19.3314C2.93803 19.722 2.93803 20.3551 3.32856 20.7457C3.71908 21.1362 4.35225 21.1362 4.74277 20.7457L12.0371 13.4513L19.3315 20.7457C19.722 21.1362 20.3552 21.1362 20.7457 20.7457C21.1362 20.3551 21.1362 19.722 20.7457 19.3315L13.4513 12.0371L20.7457 4.74272C21.1362 4.3522 21.1362 3.71903 20.7457 3.32851Z" /></svg></div>`
+    newAssets = newAssets + `<svg id="project-info-close-${project.id}" class="project-info-close project-info-close-hide" viewBox="0 0 24 24"> <path class="project-info-close-path" id="project-info-close-path-${project.id}" d="M20.7457 3.32851C20.3552 2.93798 19.722 2.93798 19.3315 3.32851L12.0371 10.6229L4.74275 3.32851C4.35223 2.93798 3.71906 2.93798 3.32854 3.32851C2.93801 3.71903 2.93801 4.3522 3.32854 4.74272L10.6229 12.0371L3.32856 19.3314C2.93803 19.722 2.93803 20.3551 3.32856 20.7457C3.71908 21.1362 4.35225 21.1362 4.74277 20.7457L12.0371 13.4513L19.3315 20.7457C19.722 21.1362 20.3552 21.1362 20.7457 20.7457C21.1362 20.3551 21.1362 19.722 20.7457 19.3315L13.4513 12.0371L20.7457 4.74272C21.1362 4.3522 21.1362 3.71903 20.7457 3.32851Z" /></svg>`
+   
     // add about container
-    titleInfo = titleInfo + `<div class='project-info-container project-info-container-hide' id="project-info-${project.id}"><h1>ABOUT</h1></div>`
+    var newInfo = createInfoSection(project)
+    newAssets = newAssets + newInfo
+    
+    // add thumbnails
+    var newThumbs = createThumbnails(project)
+    newAssets = newAssets + newThumbs
 
     // add images container
-    titleInfo = titleInfo + `<div class="project-images"><h1>${project.title.rendered}</h1></div>`
-    // end
-    titleInfo = titleInfo + `</div>`
+    var newImages = createImages(project)
+    newAssets = newAssets + newImages
+    // end - close project-container
+    newAssets = newAssets + `</div>`
 
-    newNavs.push(titleInfo)
+    newAssetsString.push(newAssets)
   })
 
-  return newNavs
+  return newAssetsString
+}
+
+var createInfoSection = project => {
+  var { acf } = project
+  var theInfo = `<div class='project-info-container project-info-container-hide' id="project-info-${project.id}">`
+  if (acf.project_summary.length !== 0) {
+    theInfo = theInfo + `<h1>${acf.project_summary}</h1>`
+  }
+  if (acf.client.length !== 0) {
+    theInfo = theInfo + `<h2>${acf.client}</h2><p>Client</p>`
+  }
+  if (acf.agency.length !== 0) {
+    theInfo = theInfo + `<h2>${acf.agency}</h2><p>Agency</p>`
+  }
+  if (acf.creative_direction.length !== 0) {
+    theInfo = theInfo + `<h2>${acf.creative_direction}</h2><p>Creative Direction</p>`
+  }
+  if (acf.art_direction.length !== 0) {
+    theInfo = theInfo + `<h2>${acf.art_direction}</h2><p>Art Direction</p>`
+  }
+  if (acf.concept_and_strategy.length !== 0) {
+    theInfo = theInfo + `<h2>${acf.concept_and_strategy}</h2><p>Concept and Strategy</p>`
+  }
+  if (acf.video_editing.length !== 0) {
+    theInfo = theInfo + `<h2>${acf.video_editing}</h2><p>Video Editing</p>`
+  }
+  if (acf.video.length !== 0) {
+    theInfo = theInfo + `<h2>${acf.video}</h2><p>Video</p>`
+  }
+  if (acf.photography.length !== 0) {
+    theInfo = theInfo + `<h2>${acf.photography}</h2><p>Photography</p>`
+  }
+  if (acf.graphic_design.length !== 0) {
+    theInfo = theInfo + `<h2>${acf.graphic_design}</h2><p>Graphic Design</p>`
+  }
+  if (acf.logo_design.length !== 0) {
+    theInfo = theInfo + `<h2>${acf.logo_design}</h2><p>Logo Design</p>`
+  }
+  if (acf.type_design.length !== 0) {
+    theInfo = theInfo + `<h2>${acf.type_design}</h2><p>Type Design</p>`
+  }
+  if (acf.model.length !== 0) {
+    theInfo = theInfo + `<h2>${acf.model}</h2><p>Model</p>`
+  }
+  if (acf.handle.length !== 0) {
+    theInfo = theInfo + `<h2>${acf.handle}</h2>`
+  }
+  theInfo = theInfo + `</div>`
+  return theInfo
+}
+
+var createThumbnails = project => {
+  var { acf } = project
+  // console.log(project)
+  var newThumbs = `<div id="project-thumbnails-${project.id}" class="project-thumbnails">`
+  // compile thumbnail images with id's
+  for (i = 1; i < 21; i++) {
+    if (acf[`portfolio_image_landscape_${i}`] || acf[`portfolio_video_landscape_${i}`]) {
+      if (acf[`portfolio_image_landscape_${i}`]) {
+        // add image thumbnail with id from index
+        // console.log(i, "image exists")
+        newThumbs = newThumbs + `<div class="project-thumb" id="project-thumb-${project.id}-${i}"><img src="${acf[`portfolio_image_landscape_${i}`].sizes.thumbnail}" alt="thumbnail from ${project.title.rendered} project" /></div>` 
+      } else {
+        // check if the video thumb has been uplaoded
+        // console.log(i, " video exists")
+        if (acf[`portfolio_thumbnail_${i}`]) {
+          // console.log(i, " video thumb exists")
+          newThumbs = newThumbs + `<div class="project-thumb" id="project-thumb-${project.id}-${i}"><img src="${acf[`portfolio_thumbnail_${i}`].sizes.thumbnail}" alt="thumbnail from ${project.title.rendered} project" /></div>`
+        }
+      }
+    }
+  }
+
+  newThumbs = newThumbs + '</div>'
+  return newThumbs
+}
+
+var createImages = project => {
+  var { acf } = project
+  // console.log(acf)
+  var newImages = '<div class="project-images">'
+
+  newImages = newImages + `<div class="project-image" id="project-image-${project.id}-1"><img src="${acf.portfolio_image_landscape_1.url}" /></div>`
+
+  newImages = newImages + '</div>'
+
+  return newImages
 }
 jQuery(document).ready(function($) {
     console.log('script loaded yeah')

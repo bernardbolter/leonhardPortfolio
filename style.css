@@ -16,8 +16,8 @@
   justify-content: center;
   align-items: center;
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 7px;
+  left: 7px;
 }
 
 .nav-icons {
@@ -283,7 +283,10 @@
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  margin: 10px 0 0 10px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 300;
 }
 
 .project-title-container {
@@ -297,6 +300,10 @@
 .project-back {
   width: 35px;
   height: 35px;
+  top: 7px;
+  left: 7px;
+  position: absolute;
+  z-index: 300;
 }
 .project-back svg {
   width: 100%;
@@ -309,18 +316,23 @@
 
 .project-title {
   height: 35px;
-  padding: 0 15px;
+  padding: 0 14px;
   background: rgba(255, 255, 255, 0.6);
   border-radius: 18px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 0 0 10px;
   cursor: pointer;
+  position: absolute;
+  z-index: 300;
+  top: 7px;
+  left: 49px;
+}
+.project-title h1 {
   font-family: "helvetica_neue_lt_pro55_roman", sans-serif;
   font-size: 14px;
-  color: #212121;
-  font-weight: 600;
+  color: rgba(0, 0, 0, 0.7);
+  font-weight: 400;
 }
 
 .project-title-hide {
@@ -329,19 +341,35 @@
 
 .project-thumbnails {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 300;
+}
+@media screen and (min-width: 850px) {
+  .project-thumbnails {
+    flex-direction: row;
+    bottom: auto;
+    top: 7px;
+    left: 185px;
+  }
 }
 
 .project-thumb {
   width: 35px;
   height: 35px;
-  margin: 0 0 0 10px;
+  margin: 7px 0 0 0;
+}
+@media screen and (min-width: 850px) {
+  .project-thumb {
+    margin: 0 7px 10px 0;
+  }
 }
 .project-thumb img {
   width: 100%;
-  border: 2px solid white;
   border-radius: 50%;
   cursor: pointer;
 }
@@ -354,7 +382,12 @@
   align-items: center;
   background: rgba(255, 255, 255, 0.6);
   border-radius: 21px;
-  margin-left: 5px;
+  margin: 7px 0 0 0;
+}
+@media screen and (min-width: 850px) {
+  .project-thumb-loader {
+    margin: 0 0 0 7px;
+  }
 }
 .project-thumb-loader img {
   width: 70%;
@@ -362,43 +395,48 @@
 }
 
 .project-info-container {
-  width: 90%;
-  margin: 0;
-  max-width: 350px;
-  padding: 21px 14px;
-  background: rgba(255, 255, 255, 0.6);
-  border-radius: 20px;
+  width: 96%;
+  background: rgba(255, 255, 255, 0.85);
   position: absolute;
-  left: 20px;
   top: 55px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
+  left: 2%;
+  border-radius: 15px;
+  max-width: 400px;
+  padding: 10px 5px 20px;
+  z-index: 999;
+  opacity: 1;
+  visibility: visible;
+  transition: z-index 0.7s step-start, visibility 0s, opacity 0.7s ease-in-out;
+}
+@media screen and (min-width: 850px) {
+  .project-info-container {
+    width: 400px;
+    left: 20px;
+  }
 }
 .project-info-container h1 {
-  margin: 0 0 14px;
+  color: rgba(0, 0, 0, 0.7) !important;
+  font-size: 14px;
+  margin: 20px 10px;
   padding: 0;
-  font-size: 15px;
-  color: rgba(0, 0, 0, 0.7);
-  font-weight: 400;
 }
 .project-info-container h2 {
-  margin: 0;
-  padding: 0;
-  font-size: 15px;
   color: rgba(0, 0, 0, 0.7);
-  font-weight: 400;
+  font-size: 12px;
+  margin: 10px 10px 0;
+  padding: 0;
 }
 .project-info-container p {
-  margin: 0 0 14px;
-  padding: 0;
-  font-size: 14px;
+  font-size: 11px;
   color: rgba(0, 0, 0, 0.5);
+  margin: 0 0 25px 10px;
 }
 
 .project-info-container-hide {
-  display: none;
+  visibility: 0;
+  opacity: 0;
+  z-index: -10;
+  transition: z-index 0.7s step-end, opacity 0.7s, visibility 0s ease-in-out;
 }
 
 .project-info-close {
@@ -410,8 +448,11 @@
   align-items: center;
   background: rgba(255, 255, 255, 0.6);
   cursor: pointer;
-  margin: 0 0 0 10px;
   padding: 9px;
+  position: absolute;
+  z-index: 300;
+  top: 7px;
+  left: 49px;
 }
 
 .project-info-close-hide {
@@ -426,30 +467,28 @@
   overflow: hidden;
   position: relative;
 }
-.project-container h1 {
-  color: rgb(255, 255, 255);
-}
 
-.project-items {
-  width: 300%;
+.project-images {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  position: fixed;
-  z-index: -2;
-  top: 0;
-}
-
-.project-item {
+  position: absolute;
   width: 100%;
   height: 100vh;
+  overflow: hidden;
 }
-.project-item video {
+
+.project-image {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+}
+.project-image video {
   width: 100vw;
   height: 100vh;
   object-fit: cover;
 }
-.project-item img {
+.project-image img {
   width: 100%;
   height: 100vh;
   object-fit: cover;
@@ -494,6 +533,15 @@ body {
   top: 0;
   left: 0;
   z-index: -1;
+}
+.loading-container h1 {
+  color: rgb(255, 255, 255);
+  font-size: 16px;
+}
+@media screen and (min-width: 850px) {
+  .loading-container h1 {
+    font-size: 26px;
+  }
 }
 
 @-webkit-keyframes AnimationName {
