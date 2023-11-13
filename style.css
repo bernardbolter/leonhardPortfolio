@@ -10,6 +10,14 @@
   font-weight: normal;
   font-style: normal;
 }
+img {
+  pointer-events: none;
+}
+
+video {
+  pointer-events: none;
+}
+
 .nav-container {
   display: flex;
   flex-direction: row;
@@ -32,6 +40,8 @@
   margin-right: 10px;
   position: relative;
   z-index: 999;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 }
 .nav-icons svg {
   width: 65%;
@@ -187,6 +197,8 @@
   opacity: 1;
   visibility: visible;
   transition: z-index 0.7s step-start, visibility 0s, opacity 0.7s ease-in-out;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 }
 @media screen and (min-width: 850px) {
   .about-container {
@@ -300,10 +312,22 @@
 .project-back {
   width: 35px;
   height: 35px;
-  top: 7px;
-  left: 7px;
+  top: auto;
+  bottom: 7px;
+  left: auto;
+  right: 7px;
   position: absolute;
   z-index: 300;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+@media screen and (min-width: 850px) {
+  .project-back {
+    top: 7px;
+    bottom: auto;
+    left: 7px;
+    right: auto;
+  }
 }
 .project-back svg {
   width: 100%;
@@ -325,8 +349,20 @@
   cursor: pointer;
   position: absolute;
   z-index: 300;
-  top: 7px;
-  left: 49px;
+  top: auto;
+  left: auto;
+  bottom: 7px;
+  right: 49px;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+@media screen and (min-width: 850px) {
+  .project-title {
+    top: 7px;
+    left: 49px;
+    bottom: auto;
+    right: auto;
+  }
 }
 .project-title h1 {
   font-family: "helvetica_neue_lt_pro55_roman", sans-serif;
@@ -345,8 +381,10 @@
   justify-content: flex-start;
   align-items: center;
   position: absolute;
-  left: 10px;
-  bottom: 10px;
+  left: auto;
+  bottom: 52px;
+  right: 8.5px;
+  top: auto;
   z-index: 300;
 }
 @media screen and (min-width: 850px) {
@@ -355,23 +393,54 @@
     bottom: auto;
     top: 7px;
     left: 185px;
+    bottom: auto;
+    right: auto;
   }
 }
 
 .project-thumb {
-  width: 35px;
-  height: 35px;
-  margin: 7px 0 0 0;
+  width: 30px;
+  height: 30px;
+  margin: 5px 0 0 0;
 }
 @media screen and (min-width: 850px) {
   .project-thumb {
     margin: 0 7px 10px 0;
+    width: 35px;
+    height: 35px;
   }
 }
 .project-thumb img {
   width: 100%;
   border-radius: 50%;
+}
+
+.thumb-overlay {
+  position: absolute;
+  background: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  mask: linear-gradient(#000 0 0), linear-gradient(270deg, #000 50%, rgba(0, 0, 0, 0) 0) content-box 0% 0%/200% 200% no-repeat;
+  -webkit-mask: linear-gradient(#000 0 0), linear-gradient(270deg, #000 50%, rgba(0, 0, 0, 0) 0) content-box 0% 0%/200% 200% no-repeat;
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  opacity: 0.4;
+  mix-blend-mode: screen;
   cursor: pointer;
+  -webkit-mask-position: 100% 100%;
+  mask-position: 100% 100%;
+}
+@media screen and (min-width: 850px) {
+  .thumb-overlay {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+.thumb-overlay-on {
+  mask-position: 100% 100%;
+  -webkit-mask-position: 0% 0%;
 }
 
 .project-thumb-loader {
@@ -398,8 +467,10 @@
   width: 96%;
   background: rgba(255, 255, 255, 0.85);
   position: absolute;
-  top: 55px;
-  left: 2%;
+  top: auto;
+  left: auto;
+  bottom: 52px;
+  right: 50px;
   border-radius: 15px;
   max-width: 400px;
   padding: 10px 5px 20px;
@@ -407,11 +478,14 @@
   opacity: 1;
   visibility: visible;
   transition: z-index 0.7s step-start, visibility 0s, opacity 0.7s ease-in-out;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 }
 @media screen and (min-width: 850px) {
   .project-info-container {
     width: 400px;
     left: 20px;
+    top: 55px;
   }
 }
 .project-info-container h1 {
@@ -451,12 +525,30 @@
   padding: 9px;
   position: absolute;
   z-index: 300;
-  top: 7px;
-  left: 49px;
+  top: auto;
+  left: auto;
+  bottom: 7px;
+  right: 52px;
+}
+@media screen and (min-width: 850px) {
+  .project-info-close {
+    top: 7px;
+    left: 49px;
+    bottom: auto;
+    right: auto;
+  }
 }
 
 .project-info-close-hide {
   display: none;
+}
+
+#projects-container {
+  width: 100vw;
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  -webkit-scroll-snap-type: y mandatory;
 }
 
 .project-container {
@@ -466,6 +558,10 @@
   left: 0;
   overflow: hidden;
   position: relative;
+  -webkit-scroll-snap-align: start;
+  scroll-snap-align: start;
+  -webkit-scroll-snap-stop: normal;
+  scroll-snap-stop: normal;
 }
 
 .project-images {
@@ -475,7 +571,7 @@
   position: absolute;
   width: 100%;
   height: 100vh;
-  overflow: hidden;
+  transition: all 1s;
 }
 
 .project-image {
@@ -492,6 +588,25 @@
   width: 100%;
   height: 100vh;
   object-fit: cover;
+}
+
+.project-image {
+  display: block;
+  min-height: 20rem; /* layout hack */
+  background: #fff center center no-repeat;
+  background-size: cover;
+  filter: blur(3px); /* blur the lowres image */
+}
+
+.project-image > img {
+  display: block;
+  width: 100%;
+  opacity: 0; /* visually hide the img element */
+}
+
+.project-image.is-loaded {
+  filter: none; /* remove the blur on fullres image */
+  transition: filter 1s;
 }
 
 html {

@@ -25,3 +25,11 @@ $dark-text: rgba(0,0,0, .7);
 $light-text: rgba(0,0,0, .5);
 $white-text: rgba(255,255,255.8);
 $nav-back: #D9D9D9;
+
+img {
+    pointer-events: none;
+}
+
+video {
+    pointer-events: none; 
+}

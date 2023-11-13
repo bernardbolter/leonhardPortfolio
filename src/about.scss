@@ -11,6 +11,8 @@
     opacity: 1;
     visibility: visible;
     transition: z-index .7s step-start, visibility 0s, opacity .7s ease-in-out;
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
 
     @media screen and (min-width: $breakpoint) {
         width: 400px;
