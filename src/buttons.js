@@ -1,18 +1,4 @@
 jQuery(document).ready(function($) {
-  // var catEl = document.getElementById('categories');
-  // catEl.addEventListener('click', function() {
-  //   $('#categories').addClass('nav-icons-close');
-  //   $('#categories-close').removeClass('nav-icons-close');
-  //   $('#cat-section').removeClass('cat-no-show');
-  // })
-
-  // var catCloseEl = document.getElementById('categories-close');
-  // catCloseEl.addEventListener('click', function() {
-  //   $('#categories').removeClass('nav-icons-close');
-  //   $('#categories-close').addClass('nav-icons-close');
-  //   $('#cat-section').addClass('cat-no-show');
-  // })
-  
   var aboutEl = document.getElementById('about');
   if (aboutEl) {
     aboutEl.addEventListener('click', function() {

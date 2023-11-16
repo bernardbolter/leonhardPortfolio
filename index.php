@@ -17,17 +17,26 @@
 get_header(); 
 ?>
 
+<?php 
+if (isset($_GET['link']) && $_GET['link'] == true) {
+    echo '';
+} else {
+?>
+    <div class="splash-container">
+        <h1>Leonhard Laupichler</h1>
+    </div>
+<?php
+} 
+?>
+
 <?php $window_width = "<script type='text/javascript'>document.write(window.innerWidth);</script>"; ?>
 
 <?php get_template_part("nav"); ?>
 
 <?php get_template_part("about"); ?>
 
-<?php get_template_part("categories") ?>
-
 <div id="posts">
     <div class="loading-container">
-        <h1>LOADING PORTFOLIO...</h1>
     </div>
 </div>
 

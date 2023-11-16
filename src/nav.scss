@@ -27,6 +27,13 @@
         width: 65%;
         fill: $background;
     }
+
+    img {
+        width: 100%;
+        border-radius: 50%;
+        opacity: .65;
+        cursor: pointer;
+    }
 }
 
 .nav-icons-close {

@@ -47,6 +47,12 @@ video {
   width: 65%;
   fill: #212121;
 }
+.nav-icons img {
+  width: 100%;
+  border-radius: 50%;
+  opacity: 0.65;
+  cursor: pointer;
+}
 
 .nav-icons-close {
   display: none;
@@ -186,7 +192,9 @@ video {
 
 .about-container {
   width: 96%;
-  background: rgba(255, 255, 255, 0.85);
+  max-height: calc(100vh - 100px);
+  overflow: scroll;
+  background: rgba(255, 255, 255, 0.6);
   position: absolute;
   top: 55px;
   left: 2%;
@@ -199,23 +207,41 @@ video {
   transition: z-index 0.7s step-start, visibility 0s, opacity 0.7s ease-in-out;
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
+  overflow: scroll;
+  overflow-x: hidden;
 }
 @media screen and (min-width: 850px) {
   .about-container {
     width: 400px;
-    left: 20px;
+    left: 10px;
   }
 }
 .about-container h2 {
-  color: rgba(0, 0, 0, 0.7);
-  font-size: 12px;
+  color: black;
+  font-size: 13px;
   margin: 10px 10px 0;
   padding: 0;
+  font-weight: 400;
 }
 .about-container p {
   font-size: 11px;
   color: rgba(0, 0, 0, 0.5);
   margin: 0 0 25px 10px;
+}
+.about-container a {
+  font-size: 14px;
+  margin: 20px 0 10px 10px;
+  padding: 0;
+  text-decoration: none;
+  color: #222;
+  display: block;
+  opacity: 0.8;
+  transition: all 0.5s ease-in-out;
+}
+.about-container a:hover {
+  text-decoration: underline;
+  opacity: 1;
+  transition: all 0.5s ease-in-out;
 }
 
 .about-no-show {
@@ -226,9 +252,9 @@ video {
 }
 
 .services-container p {
-  color: rgba(0, 0, 0, 0.7);
-  font-size: 12px;
-  font-weight: 600;
+  color: black;
+  font-size: 13px;
+  font-weight: 400;
   margin: 0 0 0 10px;
 }
 
@@ -242,9 +268,9 @@ video {
 }
 
 .clients-container p {
-  color: rgba(0, 0, 0, 0.7);
-  font-size: 12px;
-  font-weight: 600;
+  color: black;
+  font-size: 13px;
+  font-weight: 400;
   margin: 0 0 0 10px;
 }
 
@@ -312,22 +338,12 @@ video {
 .project-back {
   width: 35px;
   height: 35px;
-  top: auto;
-  bottom: 7px;
-  left: auto;
-  right: 7px;
+  top: 7px;
+  left: 7px;
   position: absolute;
   z-index: 300;
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
-}
-@media screen and (min-width: 850px) {
-  .project-back {
-    top: 7px;
-    bottom: auto;
-    left: 7px;
-    right: auto;
-  }
 }
 .project-back svg {
   width: 100%;
@@ -349,20 +365,10 @@ video {
   cursor: pointer;
   position: absolute;
   z-index: 300;
-  top: auto;
-  left: auto;
-  bottom: 7px;
-  right: 49px;
+  top: 7px;
+  left: 49px;
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
-}
-@media screen and (min-width: 850px) {
-  .project-title {
-    top: 7px;
-    left: 49px;
-    bottom: auto;
-    right: auto;
-  }
 }
 .project-title h1 {
   font-family: "helvetica_neue_lt_pro55_roman", sans-serif;
@@ -382,7 +388,7 @@ video {
   align-items: center;
   position: absolute;
   left: auto;
-  bottom: 52px;
+  bottom: 10px;
   right: 8.5px;
   top: auto;
   z-index: 300;
@@ -399,8 +405,8 @@ video {
 }
 
 .project-thumb {
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
   margin: 5px 0 0 0;
 }
 @media screen and (min-width: 850px) {
@@ -418,8 +424,8 @@ video {
 .thumb-overlay {
   position: absolute;
   background: white;
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
   mask: linear-gradient(#000 0 0), linear-gradient(270deg, #000 50%, rgba(0, 0, 0, 0) 0) content-box 0% 0%/200% 200% no-repeat;
   -webkit-mask: linear-gradient(#000 0 0), linear-gradient(270deg, #000 50%, rgba(0, 0, 0, 0) 0) content-box 0% 0%/200% 200% no-repeat;
@@ -464,13 +470,14 @@ video {
 }
 
 .project-info-container {
-  width: 96%;
+  width: 85%;
+  max-height: calc(100vh - 100px);
+  overflow: scroll;
+  overflow-x: hidden;
   background: rgba(255, 255, 255, 0.85);
   position: absolute;
-  top: auto;
-  left: auto;
-  bottom: 52px;
-  right: 50px;
+  left: 20px;
+  top: 55px;
   border-radius: 15px;
   max-width: 400px;
   padding: 10px 5px 20px;
@@ -480,13 +487,6 @@ video {
   transition: z-index 0.7s step-start, visibility 0s, opacity 0.7s ease-in-out;
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
-}
-@media screen and (min-width: 850px) {
-  .project-info-container {
-    width: 400px;
-    left: 20px;
-    top: 55px;
-  }
 }
 .project-info-container h1 {
   color: rgba(0, 0, 0, 0.7) !important;
@@ -525,18 +525,8 @@ video {
   padding: 9px;
   position: absolute;
   z-index: 300;
-  top: auto;
-  left: auto;
-  bottom: 7px;
-  right: 52px;
-}
-@media screen and (min-width: 850px) {
-  .project-info-close {
-    top: 7px;
-    left: 49px;
-    bottom: auto;
-    right: auto;
-  }
+  top: 7px;
+  left: 49px;
 }
 
 .project-info-close-hide {
@@ -609,10 +599,89 @@ video {
   transition: filter 1s;
 }
 
+.impressum-container {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+}
+.impressum-container h1 {
+  position: absolute;
+  color: rgb(255, 255, 255);
+  font-size: 40px;
+  right: 20px;
+  top: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+.imp-back {
+  width: 35px;
+  height: 35px;
+  top: 10px;
+  left: 10px;
+  position: absolute;
+  z-index: 300;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  opacity: 0.8;
+  transition: opacity 0.5s ease-in-out;
+  cursor: pointer;
+}
+.imp-back svg {
+  width: 100%;
+  fill: transparent;
+}
+.imp-back:hover {
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.imp-content {
+  width: 85%;
+  margin: 150px 7.5%;
+  color: rgb(255, 255, 255);
+}
+
+.splash-container {
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #212121;
+  cursor: pointer;
+  transition: z-index 0.7s step-start, visibility 0s, opacity 0.7s ease-in-out;
+  opacity: 1;
+  visibility: visible;
+}
+.splash-container h1 {
+  font-size: 30px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.splash-container-hide {
+  visibility: 0;
+  opacity: 0;
+  z-index: -10;
+  transition: z-index 0.7s step-end, opacity 0.7s, visibility 0s ease-in-out;
+}
+
 html {
   font-family: "helvetica_neue_lt_pro55_roman", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
 }
 
 body {
@@ -633,7 +702,7 @@ body {
 }
 
 .loading-container {
-  background: linear-gradient(270deg, #b7caca, #3e3f3f, #6c6e6e);
+  background: linear-gradient(270deg, #212121, #3e3f3f, #343434);
   background-size: 600% 600%;
   -webkit-animation: AnimationName 30s ease infinite;
   -moz-animation: AnimationName 30s ease infinite;

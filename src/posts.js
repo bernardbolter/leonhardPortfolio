@@ -14,6 +14,11 @@ jQuery(document).ready(function($) {
     if(document.getElementById("posts") !== null) {
         newPosts()
     }
+
+    $('.splash-container').on("click", function() {
+        console.log('clicked splash')
+        $('.splash-container').addClass('splash-container-hide');
+    })
 })
 
 

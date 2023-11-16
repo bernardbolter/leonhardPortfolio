@@ -1,10 +1,18 @@
-jQuery(document).ready(function() {
+jQuery(document).ready(function($) {
     clockUpdate()
     setInterval(clockUpdate, 1000);
 });
 
 function clockUpdate() {
-    var date = new Date
+    var d = new Date();
+    localTime = d.getTime();
+    localOffset = d.getTimezoneOffset() * 60000;
+
+    // obtain UTC time in msec
+    utc = localTime + localOffset;
+    // create new Date object for different city
+    // using supplied offset
+    var date = new Date(utc + (3600000*1));
     function addZero(x) {
         if ( x < 10) {
             return x = '0' + x
@@ -28,6 +36,4 @@ function clockUpdate() {
       var s = addZero(date.getSeconds())
 
       jQuery("#clock").text(h + ':' + m + ':' + s)
-
-
 }

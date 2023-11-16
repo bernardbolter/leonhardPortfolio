@@ -21,21 +21,12 @@
 .project-back {
     width: 35px;
     height: 35px;
-    top: auto;
-    bottom: 7px;
-    left: auto;
-    right: 7px;
+    top: 7px;
+    left: 7px;
     position: absolute;
     z-index: 300;
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
-
-    @media screen and (min-width: $breakpoint) {
-        top: 7px;
-        bottom: auto;
-        left: 7px;
-        right: auto;
-    }
 
     svg {
         width: 100%;
@@ -58,19 +49,10 @@
     cursor: pointer;
     position: absolute;
     z-index: 300;
-    top: auto;
-    left: auto;
-    bottom: 7px;
-    right: 49px;
+    top: 7px;
+    left: 49px;
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
-
-    @media screen and (min-width: $breakpoint) {
-        top: 7px;
-        left: 49px;
-        bottom: auto;
-        right: auto;
-    }
      
     h1 {
         font-family: $font;
@@ -91,7 +73,7 @@
     align-items: center;
     position: absolute;
     left: auto;
-    bottom: 52px;
+    bottom: 10px;
     right: 8.5px;
     top: auto;
     z-index: 300;
@@ -107,8 +89,8 @@
 }
 
 .project-thumb {
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     margin:  5px 0 0 0;
 
     @media screen and (min-width: $breakpoint) {
@@ -126,8 +108,8 @@
 .thumb-overlay {
     position: absolute;
     background: white;
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     mask:
         linear-gradient(#000 0 0),
@@ -179,13 +161,14 @@
 
 
 .project-info-container {
-    width: 96%;
+    width: 85%;
+    max-height: calc(100vh - 100px);
+    overflow: scroll;
+    overflow-x: hidden;
     background: rgba(255,255,255,.85);
     position: absolute;
-    top: auto;
-    left: auto;
-    bottom: 52px;
-    right: 50px;
+    left: 20px;
+    top: 55px;
     border-radius: 15px;
     max-width: 400px;
     padding: 10px 5px 20px;
@@ -195,12 +178,6 @@
     transition: z-index .7s step-start, visibility 0s, opacity .7s ease-in-out;
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
-
-    @media screen and (min-width: $breakpoint) {
-        width: 400px;
-        left: 20px;
-        top: 55px;
-    } 
 
     h1 {
         color: $dark-text !important;
@@ -242,17 +219,8 @@
     padding: 9px;
     position: absolute;
     z-index: 300;
-    top: auto;
-    left: auto;
-    bottom: 7px;
-    right: 52px;
-
-    @media screen and (min-width: $breakpoint) {
-        top: 7px;
-        left: 49px;
-        bottom: auto;
-        right: auto;
-    }
+    top: 7px;
+    left: 49px;
 }
 
 .project-info-close-hide {
@@ -265,6 +233,7 @@
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
     -webkit-scroll-snap-type: y mandatory;
+    
 }
 
 .project-container {

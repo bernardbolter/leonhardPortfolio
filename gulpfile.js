@@ -4,6 +4,8 @@ var gulp = require('gulp');
 var sass = require('gulp-sass')(require('sass'));
 var rename = require('gulp-rename');
 var concat = require('gulp-concat');
+const minify = require('gulp-minify');
+var cachebust = require('gulp-cache-bust');
 
 var css = {
     SASSsrc : '/Users/besco/Local Sites/leonhard/app/public/wp-content/themes/leonhardPortfolio/src/index.scss',
@@ -19,6 +21,9 @@ gulp.task('css', function(cb) {
         .pipe(sass())
         .pipe(rename('style.css'))
         .pipe(gulp.dest(css.SASSbuild))
+        .pipe(cachebust({
+            type: 'timestamp'
+        }))
         cb()
 })
 
@@ -29,6 +34,7 @@ gulp.task('js', function(done) {
     //     presets: ['@babel/env']
     // }))
     .pipe(concat('bundle.js'))
+    .pipe(minify())
     .pipe(gulp.dest(css.JSbuild))
 })
 

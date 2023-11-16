@@ -1,6 +1,8 @@
 // variable for array of projects with project that was clicked on at the top
 var sortedProjects = []
 var ticker
+var currentProjectId = 245
+var currentProjectImage = 1
 
 // rebuild assets on resize
 jQuery(window).bind('resizeEnd', function() {
@@ -46,6 +48,7 @@ jQuery(document).ready(function($) {
       if (jQuery(window).width() > 850) {
         $(`#project-thumbnails-${id}`).css("left", "92px")
       }
+      clearTimeout(ticker)
     })
 
     // hide project info - click on outer svg
@@ -61,6 +64,8 @@ jQuery(document).ready(function($) {
         var titleWidth = jQuery(`#project-title-${id}`).width()
         $(`#project-thumbnails-${id}`).css("left", `${titleWidth + 86}px`)
       }
+      console.log(currentProjectId, currentProjectImage)
+      theTimer(currentProjectId, currentProjectImage)
     })
 
     // hide project info - click on path
@@ -76,6 +81,8 @@ jQuery(document).ready(function($) {
         var titleWidth = jQuery(`#project-title-${id}`).width()
         $(`#project-thumbnails-${id}`).css("left", `${titleWidth + 86}px`)
       }
+      console.log(currentProjectId, currentProjectImage)
+      theTimer(currentProjectId, currentProjectImage)
     })
 
     // click on project thumbs to move images
@@ -85,13 +92,50 @@ jQuery(document).ready(function($) {
       var parent_id = $(this).closest("div").attr("id").split('-')
       var project_id = parent_id[2]
       var image_number = parent_id[3]
-      console.log(project_id, image_number)
+      resetThumbFadesAfterClick(project_id, image_number)
+      document.getElementById(`project-${project_id}`).scrollIntoView({ behavior: "smooth" })
       $(`#project-images-${project_id}`).css('transform', `translateX(-${windowWidth * (parseInt(image_number)- 1)}px)`)
+      theTimer(parseInt(project_id), parseInt(image_number))
     })
 })
 
+var resetThumbFadesAfterClick = (project_id, image_number) => {
+  // make variable to check if array is before or after current project
+  var afterCurrentProject = false
+  // map all projects
+  sortedProjects.map(project => {
+    // get total number of images in project
+    var totalProjectImages = getTotalImages(project)
+
+    if (project.id === parseInt(project_id)) {
+      // if current project switch variable to true
+      afterCurrentProject = true
+      for (i = 1; i < totalProjectImages + 1; i++) {
+        if (i < parseInt(image_number)) {
+          jQuery(`#project-thumb-overlay-${project.id}-${i}`).addClass('thumb-overlay-on').css("transition", `0s`)
+        } else {
+          jQuery(`#project-thumb-overlay-${project.id}-${i}`).removeClass('thumb-overlay-on').css("transition", `0s`)
+        }
+      }
+    } else {
+      if (afterCurrentProject) {
+        for (i = 1; i < totalProjectImages + 1; i++) {
+          jQuery(`#project-thumb-overlay-${project.id}-${i}`).removeClass('thumb-overlay-on').css("transition", `0s`)
+        }
+      } else {
+        for (i = 1; i < totalProjectImages + 1; i++) {
+          jQuery(`#project-thumb-overlay-${project.id}-${i}`).addClass('thumb-overlay-on').css("transition", `0s`)
+        }
+      }
+    }
+  })
+}
+
 
 var theTimer = (project_id, image_number) => {
+  console.log("started timer")
+  currentProjectId = project_id
+  currentProjectImage = image_number
   
   // get the current project
   var currentProject = sortedProjects.find(project => project.id === project_id)
@@ -99,12 +143,12 @@ var theTimer = (project_id, image_number) => {
   var totalImages = getTotalImages(currentProject)
   // get the transition time length
   var transitionLength = currentProject.acf[`portfolio_video_length_${image_number}`]
-  console.log(project_id, image_number, transitionLength)
+  // console.log(project_id, image_number, transitionLength)
   // add transition length to class
   jQuery(`#project-thumb-overlay-${project_id}-${image_number}`).addClass('thumb-overlay-on').css("transition", `${transitionLength}s`)
   // check if its a video and start video from the begining
   var videoCheck = jQuery(`#video-${project_id}-${image_number}`)
-  console.log(videoCheck)
+  // console.log(videoCheck)
   if (videoCheck.length !== 0) {
     jQuery(`#video-${project_id}-${image_number}`).trigger('play')
   } 
@@ -185,7 +229,7 @@ var createProjectAssets = projects => {
     var newAssets = `<div class='project-container' id='project-${project.id}'>`
 
     // add back button
-    newAssets = newAssets + `<a href='/' class="project-back"><svg viewBox="0 0 42 42"><circle class="back-circle" cx="21" cy="21" r="21" /><path d="M24 13L16 21L24 29" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>`
+    newAssets = newAssets + `<a href='/?link=true' class="project-back"><svg viewBox="0 0 42 42"><circle class="back-circle" cx="21" cy="21" r="21" /><path d="M24 13L16 21L24 29" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>`
     // add title button
     newAssets = newAssets + `<div id="project-title-${project.id}" class="project-title">${project.title.rendered}</div>`
     // add close button

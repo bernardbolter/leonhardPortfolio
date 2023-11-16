@@ -19,7 +19,9 @@
     "@babel/preset-env": "^7.23.2",
     "autoprefixer": "^10.4.16",
     "gulp-babel": "^8.0.0",
+    "gulp-cache-bust": "^1.4.1",
     "gulp-concat": "^2.6.1",
+    "gulp-minify": "^3.1.0",
     "gulp-postcss": "^9.0.1",
     "gulp-sass": "^5.1.0"
   },

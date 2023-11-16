@@ -4,12 +4,19 @@
 @import './about.scss';
 @import './cat.scss';
 @import './project.scss';
+@import './imp.scss';
+@import './splash.scss';
 
 
 html {
     font-family: $font;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
 }
 
 body {
@@ -30,7 +37,7 @@ body {
 }
 
 .loading-container  {
-    background: linear-gradient(270deg, #b7caca, #3e3f3f, #6c6e6e);
+    background: linear-gradient(270deg, #212121, #3e3f3f, #343434);
     background-size: 600% 600%;
     -webkit-animation: AnimationName 30s ease infinite;
     -moz-animation: AnimationName 30s ease infinite;
