@@ -19,7 +19,7 @@ get_header(); ?>
                     </svg>
                 </a>
                 <div id="project-title" class="project-title">
-                    <h1>loading project...</h1>
+                    <h1>loading...</h1>
                 </div>
                 <div id="project-thumbnails" class="project-thumbnails">
                     <div class="project-thumb-loader">
