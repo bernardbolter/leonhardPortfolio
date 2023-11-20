@@ -21,8 +21,8 @@
 .project-back {
     width: 35px;
     height: 35px;
-    top: 7px;
-    left: 7px;
+    top: 10px;
+    left: 10px;
     position: absolute;
     z-index: 300;
     -webkit-backdrop-filter: blur(4px);
@@ -49,8 +49,8 @@
     cursor: pointer;
     position: absolute;
     z-index: 300;
-    top: 7px;
-    left: 49px;
+    top: 10px;
+    left: 52px;
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
      
@@ -81,7 +81,7 @@
     @media screen and (min-width: $breakpoint) {
         flex-direction: row;
         bottom: auto;
-        top: 7px;
+        top: 10px;
         left: 185px;
         bottom: auto;
         right: auto;
@@ -167,7 +167,7 @@
     overflow-x: hidden;
     background: rgba(255,255,255,.85);
     position: absolute;
-    left: 20px;
+    left: 10px;
     top: 55px;
     border-radius: 15px;
     max-width: 400px;
@@ -197,7 +197,7 @@
     }
 
     p {
-        font-size: 12px;
+        font-size: 13px;
         font-weight: 400;
         color: $light-text;
         margin: 0 0 25px 10px;
@@ -223,8 +223,8 @@
     padding: 9px;
     position: absolute;
     z-index: 300;
-    top: 7px;
-    left: 49px;
+    top: 10px;
+    left: 52px;
 }
 
 .project-info-close-hide {

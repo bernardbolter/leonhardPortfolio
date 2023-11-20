@@ -15,11 +15,11 @@
     <p>About</p>
     <div class="services-container"><?php the_field('services', 104); ?></div>
     <p>Services</p>
-    <h2 class="clock-container">Current Time: <span id="clock"></span> Central European Time</h2>
-    <h2>Monday-Friday: 09:00-18:00</h2>
+    <h2 class="clock-container">Current Time: <span id="clock"></span> CET</h2>
+    <h2 class="office-times">Monday-Friday: 09:00-18:00</h2>
     <p>Office Hours</p>
     <h2>contact@leonhardlaupichler.com</h2>
-    <p>contact</p>
+    <p>Email</p>
     <div class="clients-container"><?php the_field('clients', 104); ?></div>
-    <a href="<?php echo home_url(); ?>/impressum">Impressum</a>
+    <a href="<?php echo home_url(); ?>/imprint">Imprint</a>
 </div>

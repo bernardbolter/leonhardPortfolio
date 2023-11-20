@@ -4,8 +4,8 @@
     justify-content: center;
     align-items: center;
     position: absolute;
-    top: 7px;
-    left: 7px;
+    top: 10px;
+    left: 10px;
 }
 
 .nav-icons {
@@ -33,6 +33,16 @@
         border-radius: 50%;
         opacity: .65;
         cursor: pointer;
+    }
+}
+
+.about-icon {
+    opacity: .8;
+    transition: opacity .5s ease-in-out;
+
+    &:hover {
+        opacity: 1;
+        transition: opacity .5s ease-in-out;
     }
 }
 

@@ -166,7 +166,9 @@ function shuffle(array) {
 
 // variable for array of projects with project that was clicked on at the top
 var sortedProjects = []
+var sortedProjectsWithLength = []
 var ticker
+var timerPaused = false
 var currentProjectId = 245
 var currentProjectImage = 1
 
@@ -174,7 +176,8 @@ var currentProjectImage = 1
 jQuery(window).bind('resizeEnd', function() {
   //do something, window hasn't changed size in 500ms
   console.log("resized")
-  buildProjectsAssets(sortedProjects);
+  sortedProjectsWithLength = makeImageArray(sortedProjects)
+  buildProjectsAssets(sortedProjectsWithLength)
 });
 
 jQuery(window).resize(function() {
@@ -186,16 +189,17 @@ jQuery(window).resize(function() {
 
 jQuery(document).ready(function($) {
     post_id = jQuery("#post_id").val();
-    console.log(post_id)
+    // console.log(post_id)
     
     async function getProjectData(post_id) {
       var projectData = await wp.apiRequest({ path: 'wp/v2/posts?acf_format=standard&per_page=100' })
       var currentProject = projectData.filter(project => project.id === parseInt(post_id))
       sortedProjects = projectData.filter(project => project.id !== parseInt(post_id))
       sortedProjects.unshift(currentProject[0])
-      console.log(sortedProjects)
-      buildProjectsAssets(sortedProjects)
-      theTimer(sortedProjects[0].id, 1)
+      // add number of projects based on mobile and desktop
+      sortedProjectsWithLength = makeImageArray(sortedProjects)
+      buildProjectsAssets(sortedProjectsWithLength)
+      theTimer(sortedProjectsWithLength[0].id, sortedProjectsWithLength[0].imagesArray[0])
 
     }
     if (post_id !== undefined) {
@@ -204,6 +208,7 @@ jQuery(document).ready(function($) {
 
     // show project info
     $(document).on('click', '.project-title', function(e) {
+      timerPaused = true
       var id = e.target.id.slice(-3)
       var title = `#project-title-${id}`
       $(title).addClass('project-title-hide')
@@ -212,58 +217,96 @@ jQuery(document).ready(function($) {
       var close = `#project-info-close-${id}`
       $(close).removeClass('project-info-close-hide')
       if (jQuery(window).width() > 850) {
-        $(`#project-thumbnails-${id}`).css("left", "92px")
+        $(`#project-thumbnails-${id}`).css("left", "95px")
       }
       clearTimeout(ticker)
     })
 
     // hide project info - click on outer svg
     $(document).on('click', '.project-info-close', function(e) {
-      var id = e.target.id.slice(-3)
-      var title = `#project-title-${id}`
-      $(title).removeClass('project-title-hide')
-      var info = `#project-info-${id}`
-      $(info).addClass('project-info-container-hide')
-      var close = `#project-info-close-${id}`
-      $(close).addClass('project-info-close-hide')
-      if (jQuery(window).width() > 850) {
-        var titleWidth = jQuery(`#project-title-${id}`).width()
-        $(`#project-thumbnails-${id}`).css("left", `${titleWidth + 86}px`)
-      }
-      console.log(currentProjectId, currentProjectImage)
-      theTimer(currentProjectId, currentProjectImage)
+      closeInfoContainer(e, currentProjectImage, currentProjectId)
     })
 
     // hide project info - click on path
     $(document).on('click', '.project-info-close-path', function(e) {
-      var id = e.target.id.slice(-3)
-      var title = `#project-title-${id}`
-      $(title).removeClass('project-title-hide')
-      var info = `#project-info-${id}`
-      $(info).addClass('project-info-container-hide')
-      var close = `#project-info-close-${id}`
-      $(close).addClass('project-info-close-hide')
-      if (jQuery(window).width() > 850) {
-        var titleWidth = jQuery(`#project-title-${id}`).width()
-        $(`#project-thumbnails-${id}`).css("left", `${titleWidth + 86}px`)
-      }
-      console.log(currentProjectId, currentProjectImage)
-      theTimer(currentProjectId, currentProjectImage)
+      closeInfoContainer(e, currentProjectImage, currentProjectId)
     })
 
     // click on project thumbs to move images
     $(document).on('click', '.project-thumb', function(e) {
-      clearTimeout(ticker)
-      var windowWidth = $(window).width()
-      var parent_id = $(this).closest("div").attr("id").split('-')
-      var project_id = parent_id[2]
-      var image_number = parent_id[3]
-      resetThumbFadesAfterClick(project_id, image_number)
-      document.getElementById(`project-${project_id}`).scrollIntoView({ behavior: "smooth" })
-      $(`#project-images-${project_id}`).css('transform', `translateX(-${windowWidth * (parseInt(image_number)- 1)}px)`)
-      theTimer(parseInt(project_id), parseInt(image_number))
+      if (!timerPaused) {
+        clearTimeout(ticker)
+        var windowWidth = $(window).width()
+        var parent_id = $(this).closest("div").attr("id").split('-')
+        var project_id = parent_id[2]
+        var image_number = parent_id[3]
+        resetThumbFadesAfterClick(project_id, image_number)
+        document.getElementById(`project-${project_id}`).scrollIntoView({ behavior: "smooth" })
+        $(`#project-images-${project_id}`).css('transform', `translateX(-${windowWidth * (parseInt(image_number)- 1)}px)`)
+        theTimer(parseInt(project_id), parseInt(image_number))
+      }
     })
 })
+
+// get array of the image numbers to loop through and create assets
+var makeImageArray = sortedProjects => {
+  // console.log(sortedProjects)
+  var windowWidth = jQuery(window).width()
+  var projectsWithLength = []
+  sortedProjects.map(project => {
+    var imagesArray = [];
+    for (i=1; i<21; i++) {
+      if (windowWidth <= 850) {
+        if (project.acf[`portfolio_image_portrait_${i}`] !== false || project.acf[`portfolio_video_portrait_${i}`] !== false) {
+          imagesArray.push(i)
+        }
+      } else {
+        if (project.acf[`portfolio_image_landscape_${i}`] !== false || project.acf[`portfolio_video_landscape_${i}`] !== false) {
+          imagesArray.push(i)
+        }
+      }
+    }
+    // console.log(project.title.rendered, imagesArray)
+    project['imagesArray'] = imagesArray
+    projectsWithLength.push(project)
+  })
+  return projectsWithLength
+}
+
+var closeInfoContainer = (e, currentProjectImage, currentProjectId) => {
+  timerPaused = false
+  var id = e.target.id.slice(-3)
+  var title = `#project-title-${id}`
+  jQuery(title).removeClass('project-title-hide')
+  var info = `#project-info-${id}`
+  jQuery(info).addClass('project-info-container-hide')
+  var close = `#project-info-close-${id}`
+  jQuery(close).addClass('project-info-close-hide')
+  if (jQuery(window).width() > 850) {
+    var titleWidth = jQuery(`#project-title-${id}`).width()
+    jQuery(`#project-thumbnails-${id}`).css("left", `${titleWidth + 89}px`)
+  }
+  var thisProject = sortedProjects.filter(project => project.id === currentProjectId)
+  console.log(thisProject)
+  var thisImageTotal = getTotalImages(thisProject[0])
+  console.log("tot: ", thisImageTotal)
+  console.log("cur image: ", currentProjectImage)
+  var nextProject
+  var nextImage
+  if (currentProjectImage < thisImageTotal ) {
+    nextProject = currentProjectId
+    nextImage = currentProjectImage + 1
+    var windowWidth = jQuery(window).width()
+    jQuery(`#project-images-${currentProjectId}`).css('transform', `translateX(-${windowWidth * (parseInt(nextImage))}px)`)
+  } else {
+    nextProject = findNextOrder(currentProjectId)
+    console.log(nextProject)
+    document.getElementById(`project-${nextProject.id}`).scrollIntoView({ behavior: "smooth" });
+    nextImage = 1
+  }
+  console.log(nextProject.id, nextImage)
+  theTimer(nextProject.id, nextImage)
+}
 
 var resetThumbFadesAfterClick = (project_id, image_number) => {
   // make variable to check if array is before or after current project
@@ -276,22 +319,22 @@ var resetThumbFadesAfterClick = (project_id, image_number) => {
     if (project.id === parseInt(project_id)) {
       // if current project switch variable to true
       afterCurrentProject = true
-      for (i = 1; i < totalProjectImages + 1; i++) {
+      project.imagesArray.map(num => {
         if (i < parseInt(image_number)) {
-          jQuery(`#project-thumb-overlay-${project.id}-${i}`).addClass('thumb-overlay-on').css("transition", `0s`)
+          jQuery(`#project-thumb-overlay-${project.id}-${num}`).addClass('thumb-overlay-on').css("transition", `0s`)
         } else {
-          jQuery(`#project-thumb-overlay-${project.id}-${i}`).removeClass('thumb-overlay-on').css("transition", `0s`)
-        }
-      }
+          jQuery(`#project-thumb-overlay-${project.id}-${num}`).removeClass('thumb-overlay-on').css("transition", `0s`)
+        } 
+      })
     } else {
       if (afterCurrentProject) {
-        for (i = 1; i < totalProjectImages + 1; i++) {
-          jQuery(`#project-thumb-overlay-${project.id}-${i}`).removeClass('thumb-overlay-on').css("transition", `0s`)
-        }
+        project.imagesArray.map(num => {
+          jQuery(`#project-thumb-overlay-${project.id}-${num}`).removeClass('thumb-overlay-on').css("transition", `0s`)
+        })
       } else {
-        for (i = 1; i < totalProjectImages + 1; i++) {
-          jQuery(`#project-thumb-overlay-${project.id}-${i}`).addClass('thumb-overlay-on').css("transition", `0s`)
-        }
+        project.imagesArray.map(num => {
+          jQuery(`#project-thumb-overlay-${project.id}-${num}`).addClass('thumb-overlay-on').css("transition", `0s`)
+        })
       }
     }
   })
@@ -340,6 +383,7 @@ var theTimer = (project_id, image_number) => {
 }
 
 var getTotalImages = (currentProject) => {
+  // console.log(currentProject)
   let total = 0
   for (let i = 1; i < 21; i++) {
     if ((currentProject.acf[`portfolio_image_landscape_${i}`] !== false) || (currentProject.acf[`portfolio_video_landscape_${i}`] !== false)) {
@@ -355,6 +399,7 @@ var findNextOrder = (current_id) => {
 }
 
 var buildProjectsAssets = projects => {
+  console.log("build porj: ", projects)
   // get all project HTML back as an array of strings
   var projectAssets = createProjectAssets(projects)
   // join all HTM into one string
@@ -369,25 +414,18 @@ var buildProjectsAssets = projects => {
       projects.map(project => {
         var id = project.id
         var titleWidth = jQuery(`#project-title-${id}`).width()
-        jQuery(`#project-thumbnails-${id}`).css("left", `${titleWidth + 86}px`)
+        jQuery(`#project-thumbnails-${id}`).css("left", `${titleWidth + 89}px`)
       })
     }
+    var widthMinusScroll = jQuery("body").prop("clientWidth")
     projects.map(project => {
-
-      var projectsWidth = 0;
-      var widthMinusScroll = jQuery("body").prop("clientWidth");
-      console.log(widthMinusScroll)
-      for (i = 1; i < 21; i++) {
-        if (project.acf[`portfolio_image_landscape_${i}`] || project.acf[`portfolio_video_landscape_${i}`]) {
-          projectsWidth = projectsWidth + widthMinusScroll
-        }
-      }
-      jQuery(`#project-images-${project.id}`).css("width", `${projectsWidth}px`)
+      jQuery(`#project-images-${project.id}`).css("width", `${widthMinusScroll * project.imagesArray.length}px`)
     })
   }
 }
 
 var createProjectAssets = projects => {
+  console.log("CPA: ", projects)
   var newAssetsString = []
   projects.forEach(project => {
 
@@ -559,22 +597,23 @@ var createThumbnails = project => {
   // console.log(project)
   var newThumbs = `<div id="project-thumbnails-${project.id}" class="project-thumbnails">`
   // compile thumbnail images with id's
-  for (i = 1; i < 21; i++) {
-    if (acf[`portfolio_image_landscape_${i}`] || acf[`portfolio_video_landscape_${i}`]) {
-      if (acf[`portfolio_image_landscape_${i}`]) {
-        // add image thumbnail with id from index
-        // console.log(i, "image exists")
-        newThumbs = newThumbs + `<div class="project-thumb" id="project-thumb-${project.id}-${i}"><div class="thumb-overlay" id="project-thumb-overlay-${project.id}-${i}"></div><img class="project-thumb-image" id="project-thumb-image-${project.id}-${i}" src="${acf[`portfolio_image_landscape_${i}`].sizes.thumbnail}" alt="thumbnail from ${project.title.rendered} project" /></div>` 
+  console.log("the array: ", project.imagesArray)
+  var windowWidth = jQuery(window).width()
+  project.imagesArray.map(num => {
+    if (windowWidth <= 850) {
+      if (acf[`portfolio_image_portrait_${num}`] !== false) {
+        newThumbs = newThumbs + `<div class="project-thumb" id="project-thumb-${project.id}-${num}"><div class="thumb-overlay" id="project-thumb-overlay-${project.id}-${num}"></div><img class="project-thumb-image" id="project-thumb-image-${project.id}-${num}" src="${acf[`portfolio_image_portrait_${num}`].sizes.thumbnail}" alt="thumbnail from ${project.title.rendered} project" /></div>` 
       } else {
-        // check if the video thumb has been uplaoded
-        // console.log(i, " video exists")
-        if (acf[`portfolio_thumbnail_${i}`]) {
-          // console.log(i, " video thumb exists")
-          newThumbs = newThumbs + `<div class="project-thumb" id="project-thumb-${project.id}-${i}"><div class="thumb-overlay" id="project-thumb-overlay-${project.id}-${i}"></div><img class="project-thumb-image" id="project-thumb-image-${project.id}-${i}" src="${acf[`portfolio_thumbnail_${i}`].sizes.thumbnail}" alt="thumbnail from ${project.title.rendered} project" /></div>`
-        }
+        newThumbs = newThumbs + `<div class="project-thumb" id="project-thumb-${project.id}-${num}"><div class="thumb-overlay" id="project-thumb-overlay-${project.id}-${num}"></div><img class="project-thumb-image" id="project-thumb-image-${project.id}-${num}" src="${acf[`portfolio_thumbnail_${num}`].sizes.thumbnail}" alt="thumbnail from ${project.title.rendered} project" /></div>`
+      }
+    } else {
+      if (acf[`portfolio_image_landscape_${num}`] !== false) {
+        newThumbs = newThumbs + `<div class="project-thumb" id="project-thumb-${project.id}-${num}"><div class="thumb-overlay" id="project-thumb-overlay-${project.id}-${num}"></div><img class="project-thumb-image" id="project-thumb-image-${project.id}-${num}" src="${acf[`portfolio_image_landscape_${num}`].sizes.thumbnail}" alt="thumbnail from ${project.title.rendered} project" /></div>` 
+      } else {
+        newThumbs = newThumbs + `<div class="project-thumb" id="project-thumb-${project.id}-${num}"><div class="thumb-overlay" id="project-thumb-overlay-${project.id}-${num}"></div><img class="project-thumb-image" id="project-thumb-image-${project.id}-${num}" src="${acf[`portfolio_thumbnail_${num}`].sizes.thumbnail}" alt="thumbnail from ${project.title.rendered} project" /></div>`
       }
     }
-  }
+  })
 
   newThumbs = newThumbs + '</div>'
   return newThumbs
@@ -582,36 +621,31 @@ var createThumbnails = project => {
 
 var createImages = project => {
   var { acf } = project
-  console.log(project.id)
   var newImages = `<div class="project-images" id="project-images-${project.id}">`
-
-  for ( i = 1; i < 21; i++) {
+  var windowWidth = jQuery(window).width()
+  project.imagesArray.map(num => {
     var src = ''
     var mediumSrc = ''
-    if (acf[`portfolio_image_landscape_${i}`] || acf[`portfolio_video_landscape_${i}`]) {
-      if (acf[`portfolio_image_landscape_${i}`] && acf[`portfolio_image_portrait_${i}`]) {
-        if (jQuery(window).width() > 850) {
-            src = acf[`portfolio_image_landscape_${i}`].url
-            mediumSrc = acf[`portfolio_image_landscape_${i}`].sizes.medium
-          } else {
-            src = acf[`portfolio_image_portrait_${i}`].url
-            mediumSrc = acf[`portfolio_image_portrait_${i}`].sizes.medium
-          }
-          // add in image
-          newImages = newImages + `<div class="project-image" id="project-image-${project.id}-${i}" style="background-image:url(${mediumSrc});" data-image-full="${src}"><img src="${src}" alt="Image from ${project.title.rendered} Project" /></div>`
-        } else {
-          if (acf[`portfolio_video_landscape_${i}`] && acf[`portfolio_video_portrait_${i}`]) {
-            if (jQuery(window).width() > 850) {
-              src = acf[`portfolio_video_landscape_${i}`].url
-            } else {
-              src = acf[`portfolio_video_portrait_${i}`].url
-            }
-            // add in video
-            newImages = newImages + `<div class="project-image" id="project-image-${project.id}-${i}"><video id="video-${project.id}-${i}" src="${src}" autoplay loop playsinline muted></div>`
-          }
-        }
-      } 
-  }
+    if (windowWidth <= 850) {
+      if (acf[`portfolio_image_portrait_${num}`] !== false) {
+        src = acf[`portfolio_image_portrait_${num}`].url
+        mediumSrc = acf[`portfolio_image_portrait_${num}`].sizes.medium
+        newImages = newImages + `<div class="project-image" id="project-image-${project.id}-${num}" style="background-image:url(${mediumSrc});" data-image-full="${src}"><img src="${src}" alt="Image from ${project.title.rendered} Project" /></div>`
+      } else {
+        src = acf[`portfolio_video_portrait_${num}`].url
+        newImages = newImages + `<div class="project-image" id="project-image-${project.id}-${num}"><video id="video-${project.id}-${num}" src="${src}" autoplay loop playsinline muted></div>`
+      }
+    } else {
+      if (acf[`portfolio_image_landscape_${num}`]) {
+        src = acf[`portfolio_image_portrait_${num}`].url
+        mediumSrc = acf[`portfolio_image_portrait_${num}`].sizes.medium
+        newImages = newImages + `<div class="project-image" id="project-image-${project.id}-${num}" style="background-image:url(${mediumSrc});" data-image-full="${src}"><img src="${src}" alt="Image from ${project.title.rendered} Project" /></div>`
+      } else {
+        src = acf[`portfolio_video_landscape_${num}`].url
+        newImages = newImages + `<div class="project-image" id="project-image-${project.id}-${num}"><video id="video-${project.id}-${num}" src="${src}" autoplay loop playsinline muted></div>`
+      }
+    }
+  })
 
   // close project-images div
   newImages = newImages + '</div>'

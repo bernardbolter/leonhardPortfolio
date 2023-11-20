@@ -24,7 +24,6 @@ get_header();
             <path d="M24 13L16 21L24 29" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
     </a>
-    <h1>IMPRESSUM</h1>
     <?php
     wp_reset_query(); // necessary to reset query
     while ( have_posts() ) : the_post();

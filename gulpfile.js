@@ -19,11 +19,11 @@ var css = {
 gulp.task('css', function(cb) {
     return gulp.src(css.SASSsrc)
         .pipe(sass())
-        .pipe(rename('style.css'))
-        .pipe(gulp.dest(css.SASSbuild))
+        .pipe(rename('custom.css'))
         .pipe(cachebust({
             type: 'timestamp'
         }))
+        .pipe(gulp.dest(css.SASSbuild))
         cb()
 })
 
@@ -34,7 +34,7 @@ gulp.task('js', function(done) {
     //     presets: ['@babel/env']
     // }))
     .pipe(concat('bundle.js'))
-    .pipe(minify())
+    // .pipe(minify())
     .pipe(gulp.dest(css.JSbuild))
 })
 

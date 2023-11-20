@@ -40,8 +40,25 @@
 }
 
 .imp-content {
-    width: 85%;
-    margin: 150px 7.5%;
-    color: $white-text;
+    width: calc(100% - 80px);
+    margin: 0 10px 0 0;
+    background: $white-fade;
+    color: black;
+    padding: 10px 30px;
+    max-width: 600px;
+    max-height: calc(100vh - 86px);
+    overflow: scroll;
+    background: rgba(255,255,255,.6);
+    position: absolute;
+    top: 55px;
+    left: 10px;
+    border-radius: 15px;
+    overflow: scroll;
+    overflow-x: hidden;
 
+    p {
+        line-height: 1.4em;
+        font-weight: 400;
+        font-size: 13px;   
+    }
 }
