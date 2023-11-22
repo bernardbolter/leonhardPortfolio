@@ -40,7 +40,7 @@ function lazyLoad() {
     });  
   }
 var allPosts = [];
-var filteredPosts = [];
+var arrangedPosts = [];
 var breakpoint = 850;
 var postsHTML = document.getElementById('posts')
 
@@ -49,8 +49,9 @@ jQuery(document).ready(function($) {
         console.log("getting posts")
         allPosts = await wp.apiRequest({ path: 'wp/v2/posts?acf_format=standard&per_page=100' })
         console.log(allPosts)
-        filteredPosts = allPosts
-        displayAllPosts(filteredPosts)
+        arrangedPosts = await arrangePosts(allPosts)
+        console.log(arrangedPosts)
+        displayAllPosts(arrangedPosts)
     }
     if(document.getElementById("posts") !== null) {
         newPosts()
@@ -66,7 +67,8 @@ jQuery(document).ready(function($) {
 jQuery(window).bind('resizeEnd', function() {
     //do something, window hasn't changed size in 500ms
     console.log("resized")
-    displayAllPosts(filteredPosts);
+    arrangedPosts = arrangePosts(allPosts)
+    displayAllPosts(arrangedPosts);
 });
 
 jQuery(window).resize(function() {
@@ -75,6 +77,40 @@ jQuery(window).resize(function() {
         jQuery(this).trigger('resizeEnd');
     }, 500);
 });
+
+const arrangePosts = posts => {
+    var noOrderPosts = []
+    var orderedPosts = []
+    var windowWidth = window.innerWidth
+    posts.map(post => {
+        if (windowWidth > breakpoint) {
+            if (post.acf.mobile_order.length === 0) {
+                noOrderPosts.push(post)
+            } else {
+                orderedPosts.push(post)
+            }
+        } else {
+            if (post.acf.desktop_order.length === 0) {
+                noOrderPosts.push(post)
+            } else {
+                orderedPosts.push(post)
+            }
+        }
+        
+    })
+    console.log(noOrderPosts)
+    console.log(orderedPosts)
+    orderedPosts.map(post => {
+        if (windowWidth > breakpoint) {
+            noOrderPosts.splice(post.acf.desktop_order - 1, 0, post)
+        } else {
+            noOrderPosts.splice(post.acf.mobile_order - 1, 0, post)
+        }
+    })
+    console.log(noOrderPosts)
+
+    return noOrderPosts
+}
 
 const displayAllPosts = (posts) => {
     // shuffledPosts = shuffle(posts)
@@ -88,82 +124,84 @@ const displayAllPosts = (posts) => {
 }
 
 const decideImageFormat = (post, i) => {
-    if (window.innerWidth <= breakpoint) {
-        if (i === 1 || 12 || 21 | 32) {
-            if (post.acf.landscape === false) {
-                return 'https://www.tlbx.app/200-300.svg'
-            } else {
-                return post.acf.landscape.sizes.medium_large
-            }
-        } else if (i === 8 || 13 || 25) {
-            if (post.acf.portrait === false) {
-                return 'https://www.tlbx.app/200-300.svg'
-            } else {
-                return post.acf.portrait.sizes.medium_large
-            }
-        } else if (i === 9 || 16 || 26 || 33) {
-            if (post.acf.square === false) {
-                return 'https://www.tlbx.app/200-300.svg'
-            } else {
-                return post.acf.square.sizes.medium_large
-            }
+    if (window.innerWidth > breakpoint) {
+        // Desktop Order
+        if (i === 2 || 4 || 9 || 23 || 24 ) {
+            if (post.acf.landscape !== false) {
+                return post.acf.landscape.sizes.large
+            } else if (post.acf.square !== false) {
+                return post.acf.square.sizes.large
+            } else if (post.acf.portrait !== false) {
+                return post.acf.portrait.sizes.large
+            } else return 'https://www.tlbx.app/200-300.svg'
+        } else if (i === 1 || 11 || 17 || 31 || 32) {
+            if (post.acf.portrait !== false) {
+                return post.acf.portrait.sizes.large
+            } else if (post.acf.square !== false) {
+                return post.acf.square.sizes.large
+            } else if (post.acf.landscape !== false) {
+                return post.acf.landscape.sizes.large
+            } else return 'https://www.tlbx.app/200-300.svg'
+            // LARGE SQUARE
+        } else if (i === 7 || 13 || 24 || 33) {
+            if (post.acf.square !== false) {
+                return post.acf.square.sizes.large
+            } else if (post.acf.landscape !== false) {
+                return post.acf.landscape.sizes.large
+            } else if (post.acf.portrait !== false) {
+                return post.acf.portrait.sizes.large
+            } else return 'https://www.tlbx.app/200-300.svg'
+            // SMALL SQUARE
         } else {
-            if (post.acf.square === false) {
-                return 'https://www.tlbx.app/200-300.svg'
-            } else {
+            if (post.acf.square !== false) {
                 return post.acf.square.sizes.medium
-            }
+            } else if (post.acf.landscape !== false) {
+                return post.acf.landscape.sizes.medium
+            } else if (post.acf.portrait !== false) {
+                return post.acf.portrait.sizes.medium
+            } else return 'https://www.tlbx.app/200-300.svg'
         }
     } else {
-        if (i === 2 || 4 || 9 || 23 || 25 || 36) {
-            if (post.acf.landscape === false) {
-                return 'https://www.tlbx.app/200-300.svg'
-            } else {
-                return post.acf.landscape.sizes.large
-            }
-        } else if (i === 1 || 11 || 17 || 32 || 33) {
-            if (post.acf.portrait === false) {
-                return 'https://www.tlbx.app/200-300.svg'
-            } else {
-                return post.acf.portrait.sizes.large
-            }
-        } else if (i === 7 || 13 || 26 ) {
-            if (post.acf.square === false) {
-                return 'https://www.tlbx.app/200-300.svg'
-            } else {
-                return post.acf.square.sizes.large
-            }
-        } else {
-            if (post.acf.square === false) {
-                return 'https://www.tlbx.app/200-300.svg'
-            } else {
+        // Mobile Order
+        if (i === 1 || 12 || 21 || 31 ) {
+            // LANDSCAPE
+            if (post.acf.landscape !== false) {
+                return post.acf.landscape.sizes.medium_large
+            } else if (post.acf.square !== false) {
                 return post.acf.square.sizes.medium_large
-            }
+            } else if (post.acf.portrait !== false) {
+                return post.acf.portrait.sizes.medium_large
+            } else return 'https://www.tlbx.app/200-300.svg'
+        }
+        else if (i === 8 || 11 || 13 || 33) {
+            // PORTRAIT
+            if (post.acf.portrait !== false) {
+                return post.acf.portrait.sizes.medium_large
+            } else if (post.acf.square !== false) {
+                return post.acf.square.sizes.medium_large
+            } else if (post.acf.landscape !== false) {
+                return post.acf.landscape.sizes.medium_large
+            } else return 'https://www.tlbx.app/200-300.svg'
+        } else if (i === 9 || 16 || 32 ) {
+            // LARGE SQUARE
+            if (post.acf.square !== false) {
+                return post.acf.square.sizes.large
+            } else if (post.acf.landscape !== false) {
+                return post.acf.landscape.sizes.large
+            } else if (post.acf.portrait !== false) {
+                return post.acf.portrait.sizes.large
+            } else return 'https://www.tlbx.app/200-300.svg'
+        } else {
+            if (post.acf.square !== false) {
+                return post.acf.square.sizes.medium
+            } else if (post.acf.landscape !== false) {
+                return post.acf.landscape.sizes.medium
+            } else if (post.acf.portrait !== false) {
+                return post.acf.portrait.sizes.medium
+            }  return 'https://www.tlbx.app/200-300.svg'
         }
     }
 }
-
-// HELPERS
-
-function shuffle(array) {
-    let currentIndex = array.length,  randomIndex;
-  
-    // While there remain elements to shuffle.
-    while (currentIndex > 0) {
-  
-      // Pick a remaining element.
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-  
-      // And swap it with the current element.
-      [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex], array[currentIndex]];
-    }
-  
-    return array;
-  }
-
-
 // variable for array of projects with project that was clicked on at the top
 var sortedProjects = []
 var sortedProjectsWithLength = []
@@ -200,8 +238,9 @@ jQuery(document).ready(function($) {
       sortedProjectsWithLength = makeImageArray(sortedProjects)
       buildProjectsAssets(sortedProjectsWithLength)
       theTimer(sortedProjectsWithLength[0].id, sortedProjectsWithLength[0].imagesArray[0])
-
+      console.log(sortedProjectsWithLength)
     }
+
     if (post_id !== undefined) {
       getProjectData(post_id)
     }
@@ -240,9 +279,14 @@ jQuery(document).ready(function($) {
         var parent_id = $(this).closest("div").attr("id").split('-')
         var project_id = parent_id[2]
         var image_number = parent_id[3]
+        console.log(project_id, image_number)
         resetThumbFadesAfterClick(project_id, image_number)
         document.getElementById(`project-${project_id}`).scrollIntoView({ behavior: "smooth" })
-        $(`#project-images-${project_id}`).css('transform', `translateX(-${windowWidth * (parseInt(image_number)- 1)}px)`)
+        console.log(sortedProjectsWithLength, project_id)
+        var thisProject = sortedProjectsWithLength.filter(project => project.id === parseInt(project_id))
+        console.log(thisProject)
+        var imageIndex = thisProject[0].imagesArray.indexOf(parseInt(image_number))
+        $(`#project-images-${project_id}`).css('transform', `translateX(-${windowWidth * (imageIndex)}px)`)
         theTimer(parseInt(project_id), parseInt(image_number))
       }
     })
@@ -275,6 +319,7 @@ var makeImageArray = sortedProjects => {
 
 var closeInfoContainer = (e, currentProjectImage, currentProjectId) => {
   timerPaused = false
+  clearTimeout(ticker)
   var id = e.target.id.slice(-3)
   var title = `#project-title-${id}`
   jQuery(title).removeClass('project-title-hide')
@@ -286,26 +331,29 @@ var closeInfoContainer = (e, currentProjectImage, currentProjectId) => {
     var titleWidth = jQuery(`#project-title-${id}`).width()
     jQuery(`#project-thumbnails-${id}`).css("left", `${titleWidth + 89}px`)
   }
-  var thisProject = sortedProjects.filter(project => project.id === currentProjectId)
+  var thisProject = sortedProjectsWithLength.filter(project => project.id === currentProjectId)
   console.log(thisProject)
-  var thisImageTotal = getTotalImages(thisProject[0])
-  console.log("tot: ", thisImageTotal)
   console.log("cur image: ", currentProjectImage)
-  var nextProject
+  var nextProjectId
   var nextImage
-  if (currentProjectImage < thisImageTotal ) {
-    nextProject = currentProjectId
-    nextImage = currentProjectImage + 1
+  if (currentProjectImage < thisProject[0].imagesArray.length ) {
+    console.log("in project")
+    nextProjectId = currentProjectId
+    getNextImageIndex = thisProject[0].imagesArray.indexOf(currentProjectImage)
+    console.log(thisProject[0].imagesArray[getNextImageIndex + 1])
+    nextImage = thisProject[0].imagesArray[getNextImageIndex + 1]
+    console.log("next I: ", nextImage)
     var windowWidth = jQuery(window).width()
-    jQuery(`#project-images-${currentProjectId}`).css('transform', `translateX(-${windowWidth * (parseInt(nextImage))}px)`)
+    jQuery(`#project-images-${currentProjectId}`).css('transform', `translateX(-${windowWidth * (parseInt(getNextImageIndex + 1))}px)`)
   } else {
-    nextProject = findNextOrder(currentProjectId)
-    console.log(nextProject)
+    console.log("end of project")
+    var nextProject = findNextOrder(currentProjectId)
+    nextProjectId = nextProject.id
     document.getElementById(`project-${nextProject.id}`).scrollIntoView({ behavior: "smooth" });
-    nextImage = 1
+    nextImage = nextProject.imagesArray[0]
   }
-  console.log(nextProject.id, nextImage)
-  theTimer(nextProject.id, nextImage)
+  console.log("before time: ", nextProjectId, nextImage)
+  theTimer(nextProjectId, nextImage)
 }
 
 var resetThumbFadesAfterClick = (project_id, image_number) => {
@@ -313,15 +361,13 @@ var resetThumbFadesAfterClick = (project_id, image_number) => {
   var afterCurrentProject = false
   // map all projects
   sortedProjects.map(project => {
-    // get total number of images in project
-    var totalProjectImages = getTotalImages(project)
-
+    3
     if (project.id === parseInt(project_id)) {
       // if current project switch variable to true
       afterCurrentProject = true
       project.imagesArray.map(num => {
-        if (i < parseInt(image_number)) {
-          jQuery(`#project-thumb-overlay-${project.id}-${num}`).addClass('thumb-overlay-on').css("transition", `0s`)
+        if (num < parseInt(image_number)) {
+          jQuery(`#project-thumb-overlay-${project.id}-${num}`).addClass('thumb-overlay-on').css("transition", `0s !important`)
         } else {
           jQuery(`#project-thumb-overlay-${project.id}-${num}`).removeClass('thumb-overlay-on').css("transition", `0s`)
         } 
@@ -329,7 +375,7 @@ var resetThumbFadesAfterClick = (project_id, image_number) => {
     } else {
       if (afterCurrentProject) {
         project.imagesArray.map(num => {
-          jQuery(`#project-thumb-overlay-${project.id}-${num}`).removeClass('thumb-overlay-on').css("transition", `0s`)
+          jQuery(`#project-thumb-overlay-${project.id}-${num}`).removeClass('thumb-overlay-on').css("transition", `0s !important`)
         })
       } else {
         project.imagesArray.map(num => {
@@ -348,49 +394,39 @@ var theTimer = (project_id, image_number) => {
   
   // get the current project
   var currentProject = sortedProjects.find(project => project.id === project_id)
-  // get total number of projects
-  var totalImages = getTotalImages(currentProject)
   // get the transition time length
   var transitionLength = currentProject.acf[`portfolio_video_length_${image_number}`]
-  // console.log(project_id, image_number, transitionLength)
   // add transition length to class
   jQuery(`#project-thumb-overlay-${project_id}-${image_number}`).addClass('thumb-overlay-on').css("transition", `${transitionLength}s`)
   // check if its a video and start video from the begining
   var videoCheck = jQuery(`#video-${project_id}-${image_number}`)
-  // console.log(videoCheck)
   if (videoCheck.length !== 0) {
     jQuery(`#video-${project_id}-${image_number}`).trigger('play')
-  } 
+  }
+  var windowWidth = jQuery(window).width()
+  var imageIndex = currentProject.imagesArray.indexOf(image_number)
   // start timer
   ticker = setTimeout(() => {
-    if (image_number < totalImages ) {
-      var windowWidth = jQuery(window).width()
-      jQuery(`#project-images-${project_id}`).css('transform', `translateX(-${windowWidth * (parseInt(image_number))}px)`)
+    if (imageIndex + 1 < currentProject.imagesArray.length ) {
+      console.log("equal")
       
-      theTimer(project_id, image_number + 1)
+      jQuery(`#project-images-${project_id}`).css('transform', `translateX(-${windowWidth * (parseInt(imageIndex + 1))}px)`)
+      
+      console.log(currentProject.imagesArray, currentProject.imagesArray[imageIndex], currentProject.imagesArray[imageIndex + 1])
+      theTimer(project_id, currentProject.imagesArray[imageIndex + 1])
     } else {
+      console.log("next")
       // find next project 
       var nextProject = findNextOrder(project_id)
-      console.log(nextProject)
+      // console.log(nextProject)
       // scroll to next project, using polyfill smoothscroll
       document.getElementById(`project-${nextProject.id}`).scrollIntoView({ behavior: "smooth" });
       // start image timer in the next project
-      theTimer(nextProject.id, 1)
+      theTimer(nextProject.id, nextProject.imagesArray[0])
     }
 
 
   }, [`${transitionLength}000`])
-}
-
-var getTotalImages = (currentProject) => {
-  // console.log(currentProject)
-  let total = 0
-  for (let i = 1; i < 21; i++) {
-    if ((currentProject.acf[`portfolio_image_landscape_${i}`] !== false) || (currentProject.acf[`portfolio_video_landscape_${i}`] !== false)) {
-      total = total + 1
-    }
-  }
-  return total
 }
 
 var findNextOrder = (current_id) => {
@@ -399,12 +435,10 @@ var findNextOrder = (current_id) => {
 }
 
 var buildProjectsAssets = projects => {
-  console.log("build porj: ", projects)
   // get all project HTML back as an array of strings
   var projectAssets = createProjectAssets(projects)
-  // join all HTM into one string
+  // join all HTML into one string
   var allProjects = projectAssets.join('')
-  console.log("all assets: ", allProjects)
   var container = document.getElementById('projects-container')
   // inject into page
   if (container) {
@@ -425,7 +459,6 @@ var buildProjectsAssets = projects => {
 }
 
 var createProjectAssets = projects => {
-  console.log("CPA: ", projects)
   var newAssetsString = []
   projects.forEach(project => {
 
@@ -433,7 +466,7 @@ var createProjectAssets = projects => {
     var newAssets = `<div class='project-container' id='project-${project.id}'>`
 
     // add back button
-    newAssets = newAssets + `<a href='/?link=true' class="project-back"><svg viewBox="0 0 42 42"><circle class="back-circle" cx="21" cy="21" r="21" /><path d="M24 13L16 21L24 29" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>`
+    newAssets = newAssets + `<a href='/?link=true' class="project-back"><svg viewBox="0 0 42 42"><circle class="back-circle" cx="21" cy="21" r="21" /><path d="M24 13L16 21L24 29" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>`
     // add title button
     newAssets = newAssets + `<div id="project-title-${project.id}" class="project-title">${project.title.rendered}</div>`
     // add close button
@@ -594,10 +627,8 @@ var createInfoSection = project => {
 
 var createThumbnails = project => {
   var { acf } = project
-  // console.log(project)
   var newThumbs = `<div id="project-thumbnails-${project.id}" class="project-thumbnails">`
   // compile thumbnail images with id's
-  console.log("the array: ", project.imagesArray)
   var windowWidth = jQuery(window).width()
   project.imagesArray.map(num => {
     if (windowWidth <= 850) {
@@ -652,9 +683,6 @@ var createImages = project => {
 
   return newImages
 }
-jQuery(document).ready(function($) {
-    console.log('script loaded yeah')
-  })
 'use strict';
 
 // polyfill

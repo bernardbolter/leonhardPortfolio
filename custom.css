@@ -31,7 +31,7 @@ video {
 .nav-icons {
   width: 35px;
   height: 35px;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(100, 100, 100, 0.4);
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -40,12 +40,12 @@ video {
   margin-right: 10px;
   position: relative;
   z-index: 999;
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
 }
 .nav-icons svg {
   width: 65%;
-  fill: #212121;
+  fill: white;
 }
 .nav-icons img {
   width: 100%;
@@ -65,6 +65,18 @@ video {
 
 .nav-icons-close {
   display: none;
+}
+
+.name-top {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(100, 100, 100, 0.4);
+  z-index: 999;
+}
+.name-top h1 {
+  color: white;
+  text-wrap: nowrap;
 }
 
 .posts-container {
@@ -197,25 +209,26 @@ video {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  pointer-events: none;
 }
 
 .about-container {
   width: 90%;
   max-height: calc(100vh - 100px);
   overflow: scroll;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(100, 100, 100, 0.4);
   position: absolute;
   top: 55px;
   left: 2%;
   border-radius: 15px;
   max-width: 400px;
-  padding: 3%;
+  padding: 15px;
   z-index: 999;
   opacity: 1;
   visibility: visible;
   transition: z-index 0.7s step-start, visibility 0s, opacity 0.7s ease-in-out;
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   overflow: scroll;
   overflow-x: hidden;
 }
@@ -226,7 +239,7 @@ video {
   }
 }
 .about-container h2 {
-  color: black;
+  color: white;
   font-size: 13px;
   line-height: 1.4em;
   margin: 10px 10px 0;
@@ -237,7 +250,7 @@ video {
   font-size: 13px;
   font-weight: 400px;
   line-height: 1.4em;
-  color: rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.7);
   margin: 0 0 25px 10px;
 }
 .about-container a {
@@ -246,7 +259,7 @@ video {
   margin: 20px 0 10px 10px;
   padding: 0;
   text-decoration: none;
-  color: #222;
+  color: #eee;
   display: block;
   opacity: 0.8;
   transition: all 0.5s ease-in-out;
@@ -265,7 +278,7 @@ video {
 }
 
 .services-container p {
-  color: black;
+  color: white;
   font-size: 13px;
   font-weight: 400;
   margin: 0 0 0 10px;
@@ -281,7 +294,7 @@ video {
 }
 
 .clients-container p {
-  color: black;
+  color: white;
   font-size: 13px;
   font-weight: 400;
   margin: 0 0 0 10px;
@@ -359,8 +372,9 @@ video {
   left: 10px;
   position: absolute;
   z-index: 300;
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-radius: 50%;
 }
 .project-back svg {
   width: 100%;
@@ -368,13 +382,13 @@ video {
 }
 
 .back-circle {
-  fill: rgba(255, 255, 255, 0.6);
+  fill: rgba(100, 100, 100, 0.4);
 }
 
 .project-title {
   height: 35px;
   padding: 0 14px;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(100, 100, 100, 0.4);
   border-radius: 18px;
   display: flex;
   justify-content: center;
@@ -384,14 +398,19 @@ video {
   z-index: 300;
   top: 10px;
   left: 52px;
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  font-family: "helvetica_neue_lt_pro55_roman", sans-serif;
+  font-size: 16px;
+  color: white;
+  font-weight: 400;
 }
 .project-title h1 {
   font-family: "helvetica_neue_lt_pro55_roman", sans-serif;
-  font-size: 14px;
-  color: rgba(0, 0, 0, 0.7);
+  font-size: 17px;
+  color: white;
   font-weight: 400;
+  letter-spacing: 0.05em;
 }
 
 .project-title-hide {
@@ -440,7 +459,7 @@ video {
 
 .thumb-overlay {
   position: absolute;
-  background: white;
+  background: rgba(100, 100, 100, 0.6);
   width: 35px;
   height: 35px;
   border-radius: 50%;
@@ -448,8 +467,6 @@ video {
   -webkit-mask: linear-gradient(#000 0 0), linear-gradient(270deg, #000 50%, rgba(0, 0, 0, 0) 0) content-box 0% 0%/200% 200% no-repeat;
   mask-composite: exclude;
   -webkit-mask-composite: xor;
-  opacity: 0.4;
-  mix-blend-mode: screen;
   cursor: pointer;
   -webkit-mask-position: 100% 100%;
   mask-position: 100% 100%;
@@ -472,7 +489,7 @@ video {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(100, 100, 100, 0.4);
   border-radius: 21px;
   margin: 7px 0 0 0;
 }
@@ -486,12 +503,21 @@ video {
   mix-blend-mode: darken;
 }
 
+.projetc-thumbs-loading {
+  left: auto;
+}
+@media screen and (min-width: 850px) {
+  .projetc-thumbs-loading {
+    left: 159px !important;
+  }
+}
+
 .project-info-container {
   width: 85%;
   max-height: calc(100vh - 100px);
   overflow: scroll;
   overflow-x: hidden;
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(100, 100, 100, 0.4);
   position: absolute;
   left: 10px;
   top: 55px;
@@ -502,11 +528,11 @@ video {
   opacity: 1;
   visibility: visible;
   transition: z-index 0.7s step-start, visibility 0s, opacity 0.7s ease-in-out;
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
 }
 .project-info-container h1 {
-  color: black !important;
+  color: white !important;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.3em;
@@ -514,7 +540,7 @@ video {
   padding: 0;
 }
 .project-info-container h2 {
-  color: black;
+  color: white;
   font-size: 13px;
   font-weight: 400;
   margin: 10px 10px 0;
@@ -523,7 +549,7 @@ video {
 .project-info-container p {
   font-size: 13px;
   font-weight: 400;
-  color: rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.7);
   margin: 0 0 25px 10px;
 }
 
@@ -541,13 +567,17 @@ video {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(100, 100, 100, 0.4);
   cursor: pointer;
   padding: 9px;
   position: absolute;
   z-index: 300;
   top: 10px;
   left: 52px;
+}
+
+.project-info-close-path {
+  fill: white;
 }
 
 .project-info-close-hide {
@@ -583,6 +613,7 @@ video {
   width: 100%;
   height: 100vh;
   transition: all 1s;
+  width: 3000px;
 }
 
 .project-image {

@@ -11,7 +11,7 @@
 .nav-icons {
     width: 35px;
     height: 35px;
-    background: $white-fade;
+    background: $info-back;
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -20,12 +20,12 @@
     margin-right: 10px;
     position: relative;
     z-index: 999;
-    -webkit-backdrop-filter: blur(4px);
-    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
 
     svg {
         width: 65%;
-        fill: $background;
+        fill: white;
     }
 
     img {
@@ -48,4 +48,17 @@
 
 .nav-icons-close {
     display: none;
+}
+
+.name-top {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: $info-back;
+    z-index: 999;
+
+    h1 {
+        color: white;
+        text-wrap: nowrap;
+    }
 }
