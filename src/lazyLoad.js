@@ -1,4 +1,5 @@
 function lazyLoad() {
+  console.log("lazy loading")
     var card_images = document.querySelectorAll('.project-image');
     
     // loop over each card image

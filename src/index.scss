@@ -53,6 +53,16 @@ body {
     left: 0;
     z-index: -1;
 
+    img {
+        object-fit: fill;
+        width: 100%;
+        -webkit-filter: blur(10px);
+        -moz-filter: blur(10px);
+        -o-filter: blur(10px);
+        -ms-filter: blur(10px);
+        filter: blur(10px);
+    }
+
     h1 {
         color: $white-text;
         font-size: 16px;

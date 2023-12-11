@@ -19,7 +19,7 @@ var css = {
 gulp.task('css', function(cb) {
     return gulp.src(css.SASSsrc)
         .pipe(sass())
-        .pipe(rename('custom.css'))
+        .pipe(rename('custom3.css'))
         .pipe(cachebust({
             type: 'timestamp'
         }))

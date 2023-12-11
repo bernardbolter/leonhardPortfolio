@@ -72,11 +72,11 @@ const arrangePosts = posts => {
 }
 
 const displayAllPosts = (posts) => {
-    // shuffledPosts = shuffle(posts)
     var newPosts = "<div class='posts-container'>"
     posts.map((post, i) => {
         // console.log(decideImageFormat(post, i + 1))
-        newPosts = newPosts + `<a class="post-container" href="${post.link}"><img src="${decideImageFormat(post, i + 1)}" alt="thumbnail from ${post.title.rendered} project" /></a>`
+        console.log(post.acf.overview_size)
+        newPosts = newPosts + `<a class="post-container ${post.acf.overview_size}" href="${post.link}">${decideImageFormat(post, i + 1)}</a>`
     })
     newPosts = newPosts + "</div>"
     jQuery("#posts").html(newPosts)
@@ -85,79 +85,113 @@ const displayAllPosts = (posts) => {
 const decideImageFormat = (post, i) => {
     if (window.innerWidth > breakpoint) {
         // Desktop Order
-        if (i === 2 || 4 || 9 || 23 || 24 ) {
-            if (post.acf.landscape !== false) {
-                return post.acf.landscape.sizes.large
-            } else if (post.acf.square !== false) {
-                return post.acf.square.sizes.large
-            } else if (post.acf.portrait !== false) {
-                return post.acf.portrait.sizes.large
-            } else return 'https://www.tlbx.app/200-300.svg'
-        } else if (i === 1 || 11 || 17 || 31 || 32) {
-            if (post.acf.portrait !== false) {
-                return post.acf.portrait.sizes.large
-            } else if (post.acf.square !== false) {
-                return post.acf.square.sizes.large
+        if (post.acf.overview_size === 'landscape') {
+            // LANDSCAPE
+            var src
+            if (post.acf.landscape_video !== false) {
+                return `<video class="overview-video" src="${post.acf.landscape_video.url}" autoplay loop playsinline muted>`
             } else if (post.acf.landscape !== false) {
-                return post.acf.landscape.sizes.large
-            } else return 'https://www.tlbx.app/200-300.svg'
+                src = post.acf.landscape.sizes.large
+            } else if (post.acf.square !== false) {
+                src =post.acf.square.sizes.large
+            } else if (post.acf.portrait !== false) {
+                src = post.acf.portrait.sizes.large
+            } else src ='https://www.tlbx.app/200-300.svg'
+            return `<img src="${src}" alt="thumbnail from ${post.title.rendered} project" />`
+        } else if (post.acf.overview_size === 'portrait') {
+             // PORTRAIT
+             var src
+            if (post.acf.portrait_video !== false) {
+                return `<video class="overview-video" src="${post.acf.portrait_video.url}" autoplay loop playsinline muted>`
+            } else if (post.acf.portrait !== false) {
+                src = post.acf.portrait.sizes.large
+            } else if (post.acf.square !== false) {
+                src = post.acf.square.sizes.large
+            } else if (post.acf.landscape !== false) {
+                src = post.acf.landscape.sizes.large
+            } else src = 'https://www.tlbx.app/200-300.svg'
+            return `<img src="${src}" alt="thumbnail from ${post.title.rendered} project" />`
+        } else if (post.acf.overview_size === 'large-square') {
             // LARGE SQUARE
-        } else if (i === 7 || 13 || 24 || 33) {
-            if (post.acf.square !== false) {
-                return post.acf.square.sizes.large
+            var src
+            if (post.acf.square_video !== false) {
+                return `<video class="overview-video" src="${post.acf.square_video.url}" autoplay loop playsinline muted>`
+            } else if (post.acf.square !== false) {
+                src = post.acf.square.sizes.large
             } else if (post.acf.landscape !== false) {
-                return post.acf.landscape.sizes.large
+                src = post.acf.landscape.sizes.large
             } else if (post.acf.portrait !== false) {
-                return post.acf.portrait.sizes.large
-            } else return 'https://www.tlbx.app/200-300.svg'
-            // SMALL SQUARE
+                src = post.acf.portrait.sizes.large
+            } else src = 'https://www.tlbx.app/200-300.svg'
+            return `<img src="${src}" alt="thumbnail from ${post.title.rendered} project" />`
         } else {
-            if (post.acf.square !== false) {
-                return post.acf.square.sizes.medium
+            // SMALL SQUARE
+            var src
+            if (post.acf.square_video !== false) {
+                return `<video class="overview-video" src="${post.acf.square_video.url}" autoplay loop playsinline muted>`
+            } else if (post.acf.square !== false) {
+                src = post.acf.square.sizes.medium_large
             } else if (post.acf.landscape !== false) {
-                return post.acf.landscape.sizes.medium
+                src = post.acf.landscape.sizes.medium_large
             } else if (post.acf.portrait !== false) {
-                return post.acf.portrait.sizes.medium
-            } else return 'https://www.tlbx.app/200-300.svg'
+                src = post.acf.portrait.sizes.medium_large
+            } else src = 'https://www.tlbx.app/200-300.svg'
+            return `<img src="${src}" alt="thumbnail from ${post.title.rendered} project" />`
         }
     } else {
         // Mobile Order
-        if (i === 1 || 12 || 21 || 31 ) {
+        if (post.acf.overview_size === 'landscape') {
             // LANDSCAPE
-            if (post.acf.landscape !== false) {
-                return post.acf.landscape.sizes.medium_large
+            var src
+            if (post.acf.landscape_video !== false) {
+                return `<video class="overview-video" src="${post.acf.landscape_video.url}" autoplay loop playsinline muted>`
+            } else if (post.acf.landscape !== false) {
+                src = post.acf.landscape.sizes.medium_large
             } else if (post.acf.square !== false) {
-                return post.acf.square.sizes.medium_large
+                src =post.acf.square.sizes.medium_large
             } else if (post.acf.portrait !== false) {
-                return post.acf.portrait.sizes.medium_large
-            } else return 'https://www.tlbx.app/200-300.svg'
-        }
-        else if (i === 8 || 11 || 13 || 33) {
+                src = post.acf.portrait.sizes.medium_large
+            } else src ='https://www.tlbx.app/200-300.svg'
+            return `<img src="${src}" alt="thumbnail from ${post.title.rendered} project" />`
+        } else if (post.acf.overview_size === 'portrait') {
             // PORTRAIT
-            if (post.acf.portrait !== false) {
-                return post.acf.portrait.sizes.medium_large
+            var src
+            if (post.acf.portrait_video !== false) {
+                return `<video class="overview-video" src="${post.acf.portrait_video.url}" autoplay loop playsinline muted>`
+            } else if (post.acf.portrait !== false) {
+                src = post.acf.portrait.sizes.medium_large
             } else if (post.acf.square !== false) {
-                return post.acf.square.sizes.medium_large
+                src = post.acf.square.sizes.medium_large
             } else if (post.acf.landscape !== false) {
-                return post.acf.landscape.sizes.medium_large
-            } else return 'https://www.tlbx.app/200-300.svg'
-        } else if (i === 9 || 16 || 32 ) {
+                src = post.acf.landscape.sizes.medium_large
+            } else src = 'https://www.tlbx.app/200-300.svg'
+            return `<img src="${src}" alt="thumbnail from ${post.title.rendered} project" />`
+        } else if (post.acf.overview_size === 'large-square') {
             // LARGE SQUARE
-            if (post.acf.square !== false) {
-                return post.acf.square.sizes.large
+            var src
+            if (post.acf.square_video !== false) {
+                return `<video class="overview-video" src="${post.acf.square_video.url}" autoplay loop playsinline muted>`
+            } else if (post.acf.square !== false) {
+                src = post.acf.square.sizes.medium_large
             } else if (post.acf.landscape !== false) {
-                return post.acf.landscape.sizes.large
+                src = post.acf.landscape.sizes.medium_large
             } else if (post.acf.portrait !== false) {
-                return post.acf.portrait.sizes.large
-            } else return 'https://www.tlbx.app/200-300.svg'
+                src = post.acf.portrait.sizes.medium_large
+            } else src = 'https://www.tlbx.app/200-300.svg'
+            return `<img src="${src}" alt="thumbnail from ${post.title.rendered} project" />`
         } else {
-            if (post.acf.square !== false) {
-                return post.acf.square.sizes.medium
+            // SMALL SQUARE
+            var src
+            if (post.acf.square_video !== false) {
+                return `<video class="overview-video" src="${post.acf.square_video.url}" autoplay loop playsinline muted>`
+            } else if (post.acf.square !== false) {
+                src = post.acf.square.sizes.medium
             } else if (post.acf.landscape !== false) {
-                return post.acf.landscape.sizes.medium
+                src = post.acf.landscape.sizes.medium
             } else if (post.acf.portrait !== false) {
-                return post.acf.portrait.sizes.medium
-            }  return 'https://www.tlbx.app/200-300.svg'
+                src = post.acf.portrait.sizes.medium
+            } else src = 'https://www.tlbx.app/200-300.svg'
+            return `<img src="${src}" alt="thumbnail from ${post.title.rendered} project" />`
         }
     }
 }

@@ -9,22 +9,25 @@
 }
 
 .nav-icons {
-    width: 35px;
-    height: 35px;
+    width: 39px;
+    height: 39px;
     background: $info-back;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    margin-right: 10px;
     position: relative;
     z-index: 999;
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
+    position: absolute;
+    z-index: 1002;
+    top: 85px;
+    left: 0;
 
     svg {
-        width: 65%;
+        width: 50%;
         fill: white;
     }
 
@@ -37,12 +40,12 @@
 }
 
 .about-icon {
-    opacity: .8;
-    transition: opacity .5s ease-in-out;
+    transform: scale(1);
+    transition: all .2s ease-in-out;
 
     &:hover {
-        opacity: 1;
-        transition: opacity .5s ease-in-out;
+        transform: scale(1.05);
+        transition: all .2s ease-in-out;
     }
 }
 
@@ -52,13 +55,29 @@
 
 .name-top {
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 85px;
+    left: 0;
     background: $info-back;
     z-index: 999;
+    border-radius: 20px;
+    color: white;
+    font-weight: 400;
+    font-size: 15px;
+    margin: 0;
+    padding: 10px 14px;
+    white-space: nowrap;
+    cursor: pointer;
+}
 
-    h1 {
-        color: white;
-        text-wrap: nowrap;
+.logo-icon {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    top: 0;
+    left: 0;
+    z-index: 1001;
+
+    img {
+        width: 100%;
     }
 }

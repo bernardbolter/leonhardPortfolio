@@ -5,11 +5,12 @@ var ticker
 var timerPaused = false
 var currentProjectId = 245
 var currentProjectImage = 1
+var aboutInfo = []
 
 // rebuild assets on resize
 jQuery(window).bind('resizeEnd', function() {
   //do something, window hasn't changed size in 500ms
-  console.log("resized")
+  // console.log("resized")
   sortedProjectsWithLength = makeImageArray(sortedProjects)
   buildProjectsAssets(sortedProjectsWithLength)
 });
@@ -27,11 +28,16 @@ jQuery(document).ready(function($) {
     
     async function getProjectData(post_id) {
       var projectData = await wp.apiRequest({ path: 'wp/v2/posts?acf_format=standard&per_page=100' })
+      console.log(projectData)
+      var aboutData = await wp.apiRequest({ path: 'wp/v2/pages/104' })
+      console.log(aboutData)
+      aboutInfo = aboutData
       var currentProject = projectData.filter(project => project.id === parseInt(post_id))
       sortedProjects = projectData.filter(project => project.id !== parseInt(post_id))
       sortedProjects.unshift(currentProject[0])
       // add number of projects based on mobile and desktop
       sortedProjectsWithLength = makeImageArray(sortedProjects)
+      console.log("sorted: ",sortedProjectsWithLength)
       buildProjectsAssets(sortedProjectsWithLength)
       theTimer(sortedProjectsWithLength[0].id, sortedProjectsWithLength[0].imagesArray[0])
       console.log(sortedProjectsWithLength)
@@ -41,56 +47,173 @@ jQuery(document).ready(function($) {
       getProjectData(post_id)
     }
 
-    // show project info
+    // BUTTON SCRIPTS
+    // #project-title-${id} = title of the project || projectTitle
+    // #project-info-close-${id} || projectInfo
+    // #project-name-${id} = Leonhard Laupichler || 
+    // #name-close-${id} = projectNameClose
+    
+
+    // CLICK PROJECT TITLE
     $(document).on('click', '.project-title', function(e) {
+      // pause timer
       timerPaused = true
+      // get id
       var id = e.target.id.slice(-3)
-      var title = `#project-title-${id}`
-      $(title).addClass('project-title-hide')
-      var info = `#project-info-${id}`
-      $(info).removeClass('project-info-container-hide')
-      var close = `#project-info-close-${id}`
-      $(close).removeClass('project-info-close-hide')
-      if (jQuery(window).width() > 850) {
-        $(`#project-thumbnails-${id}`).css("left", "95px")
-      }
+      // the div holding the name of the project
+      var projectTitle = `#project-title-${id}`
+      $(projectTitle).addClass('project-title-hide')
+      // the div holding the info for the project
+      var projectInfoContainer = `#project-info-${id}`
+      $(projectInfoContainer).removeClass('project-info-container-hide')
+      // the div holding the iclose button for the project info
+      var projectInfoClose = `#project-info-close-${id}`
+      $(projectInfoClose).removeClass('project-info-close-hide')
+      // the div holding leonhard name
+      var projectName = `#project-name-${id}`
+      $(projectName).removeClass('project-name-hide')
+      // the div holding the close button for Leo name
+      var projectNameClose = `#name-close-${id}`
+      $(projectNameClose).addClass('name-close-hide')
+      // div holding the about section
+      var aboutSection = `#about-section-${id}`
+      $(aboutSection).addClass('about-no-show')
+      // div holding the prjectThumbnails
+      var thumbs = `#project-thumbnails-${id}`
+      $(thumbs).addClass('project-thumbnails-hide')
+
       clearTimeout(ticker)
     })
 
-    // hide project info - click on outer svg
+    // CLICK THE PROJECT CLOSE BUTTON
     $(document).on('click', '.project-info-close', function(e) {
-      closeInfoContainer(e, currentProjectImage, currentProjectId)
+      var id = e.target.id.slice(-3)
+      // the div holding the name of the project
+      var projectTitle = `#project-title-${id}`
+      $(projectTitle).removeClass('project-title-hide')
+      // the div holding the info for the project
+      var projectInfoContainer = `#project-info-${id}`
+      $(projectInfoContainer).addClass('project-info-container-hide')
+      // the div holding the iclose button for the project info
+      var projectInfoClose = `#project-info-close-${id}`
+      $(projectInfoClose).addClass('project-info-close-hide')
+      // the div holding leonhard name
+      var projectName = `#project-name-${id}`
+      $(projectName).removeClass('project-name-hide')
+      // the div holding the close button for Leo name
+      var projectNameClose = `#name-close-${id}`
+      $(projectNameClose).addClass('name-close-hide')
+      // div holding the about section
+      var aboutSection = `#about-section-${id}`
+      $(aboutSection).addClass('about-no-show')
+      // div holding the prjectThumbnails
+      var thumbs = `#project-thumbnails-${id}`
+      $(thumbs).removeClass('project-thumbnails-hide')
+
+      restartTimer()
     })
 
-    // hide project info - click on path
-    $(document).on('click', '.project-info-close-path', function(e) {
-      closeInfoContainer(e, currentProjectImage, currentProjectId)
+    // CLICK PROJECT NAME TO SHOW ABOUT CONTAINER
+    $(document).on('click', '.project-name', function(e) {
+      // pause timer
+      timerPaused = true
+      // get id
+      var id = e.target.id.slice(-3)
+      // the div holding the name of the project
+      var projectTitle = `#project-title-${id}`
+      $(projectTitle).removeClass('project-title-hide')
+      // the div holding the info for the project
+      var projectInfoContainer = `#project-info-${id}`
+      $(projectInfoContainer).addClass('project-info-container-hide')
+      // the div holding the iclose button for the project info
+      var projectInfoClose = `#project-info-close-${id}`
+      $(projectInfoClose).addClass('project-info-close-hide')
+      // the div holding leonhard name
+      var projectName = `#project-name-${id}`
+      $(projectName).addClass('project-name-hide')
+      // the div holding the close button for Leo name
+      var projectNameClose = `#name-close-${id}`
+      $(projectNameClose).removeClass('name-close-hide')
+      // div holding the about section
+      var aboutSection = `#about-section-${id}`
+      $(aboutSection).removeClass('about-no-show')
+      // div holding the prjectThumbnails
+      var thumbs = `#project-thumbnails-${id}`
+      $(thumbs).addClass('project-thumbnails-hide')
+
+      clearTimeout(ticker)
     })
 
-    // click on project thumbs to move images
+    // CLICK THE PROJECT NAME CLOSE TO CLOSE ABOUT CONTAINER
+    $(document).on('click', '.name-close', function(e) {
+      var id = e.target.id.slice(-3)
+      // the div holding the name of the project
+      var projectTitle = `#project-title-${id}`
+      $(projectTitle).removeClass('project-title-hide')
+      // the div holding the info for the project
+      var projectInfoContainer = `#project-info-${id}`
+      $(projectInfoContainer).addClass('project-info-container-hide')
+      // the div holding the iclose button for the project info
+      var projectInfoClose = `#project-info-close-${id}`
+      $(projectInfoClose).addClass('project-info-close-hide')
+      // the div holding leonhard name
+      var projectName = `#project-name-${id}`
+      $(projectName).removeClass('project-name-hide')
+      // the div holding the close button for Leo name
+      var projectNameClose = `#name-close-${id}`
+      $(projectNameClose).addClass('name-close-hide')
+      // div holding the about section
+      var aboutSection = `#about-section-${id}`
+      $(aboutSection).addClass('about-no-show')
+      // div holding the prjectThumbnails
+      var thumbs = `#project-thumbnails-${id}`
+      $(thumbs).removeClass('project-thumbnails-hide')
+
+      restartTimer()
+    })
+
+    // CLICK A PROJECT THUMBNAIL AND RESET OVERLAYS, CURRETN PROJECT, CURRENT IMAGE ID
     $(document).on('click', '.project-thumb', function(e) {
+      // chack if the timer is Paused
+      console.log(timerPaused)
       if (!timerPaused) {
-        clearTimeout(ticker)
-        var windowWidth = $(window).width()
+        // get the div of wrapping id
         var parent_id = $(this).closest("div").attr("id").split('-')
-        var project_id = parent_id[2]
-        var image_number = parent_id[3]
-        console.log(project_id, image_number)
+        // get the current project ID
+        var project_id = parseInt(parent_id[2])
+        // get the current Project Image Number
+        var image_number = parseInt(parent_id[3])
         resetThumbFadesAfterClick(project_id, image_number)
-        document.getElementById(`project-${project_id}`).scrollIntoView({ behavior: "smooth" })
-        console.log(sortedProjectsWithLength, project_id)
-        var thisProject = sortedProjectsWithLength.filter(project => project.id === parseInt(project_id))
-        console.log(thisProject)
-        var imageIndex = thisProject[0].imagesArray.indexOf(parseInt(image_number))
-        $(`#project-images-${project_id}`).css('transform', `translateX(-${windowWidth * (imageIndex)}px)`)
-        theTimer(parseInt(project_id), parseInt(image_number))
+        clearTimeout(ticker)
+        console.log("ticker: ", ticker)
+        theTimer(project_id, image_number)
       }
     })
 })
 
+var restartTimer = () => {
+  resetThumbFadesAfterClick(currentProjectId, currentProjectImage + 1)
+  // get the id of the current project
+  var thisProject = sortedProjectsWithLength.filter(project => project.id === currentProjectId)
+  var nextProjectId
+  var nextImage
+  if (currentProjectImage < thisProject[0].imagesArray.length ) {
+    nextProjectId = currentProjectId
+    getNextImageIndex = thisProject[0].imagesArray.indexOf(currentProjectImage)
+    nextImage = thisProject[0].imagesArray[getNextImageIndex + 1]
+    var windowWidth = jQuery(window).width()
+    jQuery(`#project-images-${currentProjectId}`).css('transform', `translateX(-${windowWidth * (parseInt(getNextImageIndex + 1))}px)`)
+  } else {
+    var nextProject = findNextOrder(currentProjectId)
+    nextProjectId = nextProject.id
+    document.getElementById(`project-${nextProject.id}`).scrollIntoView({ behavior: "smooth" });
+    nextImage = nextProject.imagesArray[0]
+  }
+  theTimer(nextProjectId, nextImage)
+}
+
 // get array of the image numbers to loop through and create assets
 var makeImageArray = sortedProjects => {
-  // console.log(sortedProjects)
   var windowWidth = jQuery(window).width()
   var projectsWithLength = []
   sortedProjects.map(project => {
@@ -106,58 +229,19 @@ var makeImageArray = sortedProjects => {
         }
       }
     }
-    // console.log(project.title.rendered, imagesArray)
     project['imagesArray'] = imagesArray
     projectsWithLength.push(project)
   })
   return projectsWithLength
 }
 
-var closeInfoContainer = (e, currentProjectImage, currentProjectId) => {
-  timerPaused = false
-  clearTimeout(ticker)
-  var id = e.target.id.slice(-3)
-  var title = `#project-title-${id}`
-  jQuery(title).removeClass('project-title-hide')
-  var info = `#project-info-${id}`
-  jQuery(info).addClass('project-info-container-hide')
-  var close = `#project-info-close-${id}`
-  jQuery(close).addClass('project-info-close-hide')
-  if (jQuery(window).width() > 850) {
-    var titleWidth = jQuery(`#project-title-${id}`).width()
-    jQuery(`#project-thumbnails-${id}`).css("left", `${titleWidth + 89}px`)
-  }
-  var thisProject = sortedProjectsWithLength.filter(project => project.id === currentProjectId)
-  console.log(thisProject)
-  console.log("cur image: ", currentProjectImage)
-  var nextProjectId
-  var nextImage
-  if (currentProjectImage < thisProject[0].imagesArray.length ) {
-    console.log("in project")
-    nextProjectId = currentProjectId
-    getNextImageIndex = thisProject[0].imagesArray.indexOf(currentProjectImage)
-    console.log(thisProject[0].imagesArray[getNextImageIndex + 1])
-    nextImage = thisProject[0].imagesArray[getNextImageIndex + 1]
-    console.log("next I: ", nextImage)
-    var windowWidth = jQuery(window).width()
-    jQuery(`#project-images-${currentProjectId}`).css('transform', `translateX(-${windowWidth * (parseInt(getNextImageIndex + 1))}px)`)
-  } else {
-    console.log("end of project")
-    var nextProject = findNextOrder(currentProjectId)
-    nextProjectId = nextProject.id
-    document.getElementById(`project-${nextProject.id}`).scrollIntoView({ behavior: "smooth" });
-    nextImage = nextProject.imagesArray[0]
-  }
-  console.log("before time: ", nextProjectId, nextImage)
-  theTimer(nextProjectId, nextImage)
-}
-
 var resetThumbFadesAfterClick = (project_id, image_number) => {
+  resetCurrentImage(project_id, image_number)
   // make variable to check if array is before or after current project
   var afterCurrentProject = false
+
   // map all projects
   sortedProjects.map(project => {
-    3
     if (project.id === parseInt(project_id)) {
       // if current project switch variable to true
       afterCurrentProject = true
@@ -182,16 +266,29 @@ var resetThumbFadesAfterClick = (project_id, image_number) => {
   })
 }
 
+// Reset the current image when clicking a thumb or after timer reset
+var resetCurrentImage = (project_id, image_number) => {
+  // get the windowWidth
+  var windowWidth = jQuery(window).width()
+  jQuery(`#project-images-${project_id}`).css('transform', `translateX(-${windowWidth * (parseInt(image_number - 1))}px)`)
+}
+
 
 var theTimer = (project_id, image_number) => {
-  console.log("started timer")
+  // console.log("started timer")
   currentProjectId = project_id
   currentProjectImage = image_number
-  
+  var windowWidth = jQuery(window).width()
+  timerPaused = false
   // get the current project
   var currentProject = sortedProjects.find(project => project.id === project_id)
   // get the transition time length
-  var transitionLength = currentProject.acf[`portfolio_video_length_${image_number}`]
+  var transitionLength
+  if (windowWidth > 850) {
+    transitionLength = currentProject.acf[`portfolio_video_length_${image_number}`]
+  } else {
+    transitionLength = currentProject.acf[`portfolio_video_mobile_length_${image_number}`]
+  }
   // add transition length to class
   jQuery(`#project-thumb-overlay-${project_id}-${image_number}`).addClass('thumb-overlay-on').css("transition", `${transitionLength}s`)
   // check if its a video and start video from the begining
@@ -204,17 +301,13 @@ var theTimer = (project_id, image_number) => {
   // start timer
   ticker = setTimeout(() => {
     if (imageIndex + 1 < currentProject.imagesArray.length ) {
-      console.log("equal")
-      
+      // move to current image
       jQuery(`#project-images-${project_id}`).css('transform', `translateX(-${windowWidth * (parseInt(imageIndex + 1))}px)`)
-      
-      console.log(currentProject.imagesArray, currentProject.imagesArray[imageIndex], currentProject.imagesArray[imageIndex + 1])
+      // restart the timer
       theTimer(project_id, currentProject.imagesArray[imageIndex + 1])
     } else {
-      console.log("next")
       // find next project 
       var nextProject = findNextOrder(project_id)
-      // console.log(nextProject)
       // scroll to next project, using polyfill smoothscroll
       document.getElementById(`project-${nextProject.id}`).scrollIntoView({ behavior: "smooth" });
       // start image timer in the next project
@@ -260,15 +353,27 @@ var createProjectAssets = projects => {
 
     // add project container
     var newAssets = `<div class='project-container' id='project-${project.id}'>`
-
+    // add logo
+    newAssets = newAssets + `<div class="project-logo"><img src="${LEOSITE.templateURI}/img/logo_still.png" alt="logo" /></div>`
+    // add project buttons wrapper
+    newAssets = newAssets + '<div class="project-buttons-container">'
     // add back button
-    newAssets = newAssets + `<a href='/?link=true' class="project-back"><svg viewBox="0 0 42 42"><circle class="back-circle" cx="21" cy="21" r="21" /><path d="M24 13L16 21L24 29" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>`
+    newAssets = newAssets + `<a href="/?link=true" class="project-back"><img src="${LEOSITE.templateURI}/img/back.png" alt="back button" /></a>`
+    // add name
+    newAssets = newAssets + `<h1 id="project-name-${project.id}"class="project-name">Leanhard Laupichler</h1>`
+    // add name close button
+    newAssets = newAssets + `<div id="name-close-${project.id}" class="name-close name-close-hide"><img src="${LEOSITE.templateURI}/img/close.png" alt="close button" /></div>`
     // add title button
     newAssets = newAssets + `<div id="project-title-${project.id}" class="project-title">${project.title.rendered}</div>`
     // add close button
-    newAssets = newAssets + `<svg id="project-info-close-${project.id}" class="project-info-close project-info-close-hide" viewBox="0 0 24 24"> <path class="project-info-close-path" id="project-info-close-path-${project.id}" d="M20.7457 3.32851C20.3552 2.93798 19.722 2.93798 19.3315 3.32851L12.0371 10.6229L4.74275 3.32851C4.35223 2.93798 3.71906 2.93798 3.32854 3.32851C2.93801 3.71903 2.93801 4.3522 3.32854 4.74272L10.6229 12.0371L3.32856 19.3314C2.93803 19.722 2.93803 20.3551 3.32856 20.7457C3.71908 21.1362 4.35225 21.1362 4.74277 20.7457L12.0371 13.4513L19.3315 20.7457C19.722 21.1362 20.3552 21.1362 20.7457 20.7457C21.1362 20.3551 21.1362 19.722 20.7457 19.3315L13.4513 12.0371L20.7457 4.74272C21.1362 4.3522 21.1362 3.71903 20.7457 3.32851Z" /></svg>`
-   
+    newAssets = newAssets + `<div id="project-info-close-${project.id}" class="project-info-close project-info-close-hide"><img src="${LEOSITE.templateURI}/img/close.png" alt="close button" /></div>`
+    // close project buttons container
+    newAssets = newAssets + '</div>'
     // add about container
+    var newAbout = createAboutSection(project)
+    newAssets = newAssets + newAbout
+
+    // add the info
     var newInfo = createInfoSection(project)
     newAssets = newAssets + newInfo
     
@@ -286,6 +391,25 @@ var createProjectAssets = projects => {
   })
 
   return newAssetsString
+}
+
+var createAboutSection = project => {
+  var { acf } = aboutInfo
+  var theAbout = `<div class="about-container about-no-show about-project" id="about-section-${project.id}">`
+  theAbout = theAbout + `<h2>${acf.description}</h2>`
+  theAbout = theAbout + '<p>About</p>'
+  theAbout = theAbout + `<div class="services-container"><p>${acf.services}</p></div>`
+  theAbout = theAbout + '<p>Services</p>'
+  theAbout = theAbout + '<h2 class="clock-container">Current Time: <span id="clock"></span> CET</h2>'
+  theAbout = theAbout + '<h2 class="office-times">Monday-Friday: 09:00-18:00</h2>'
+  theAbout = theAbout + '<p>Office Hours</p>'
+  theAbout = theAbout + '<h2>contact@leonhardlaupichler.com</h2>'
+  theAbout = theAbout + '<p>Email</p>'
+  theAbout = theAbout + `<div class="clients-container"><p>${acf.clients}</p></div>`
+  theAbout = theAbout + '<a href="/imprint">Imprint</a>'
+  theAbout = theAbout + '</div>'
+  return theAbout
+
 }
 
 var createInfoSection = project => {
@@ -423,21 +547,31 @@ var createInfoSection = project => {
 
 var createThumbnails = project => {
   var { acf } = project
+  // console.log(acf)
   var newThumbs = `<div id="project-thumbnails-${project.id}" class="project-thumbnails">`
   // compile thumbnail images with id's
   var windowWidth = jQuery(window).width()
+  // loop through and create thumb HTML
   project.imagesArray.map(num => {
     if (windowWidth <= 850) {
       if (acf[`portfolio_image_portrait_${num}`] !== false) {
         newThumbs = newThumbs + `<div class="project-thumb" id="project-thumb-${project.id}-${num}"><div class="thumb-overlay" id="project-thumb-overlay-${project.id}-${num}"></div><img class="project-thumb-image" id="project-thumb-image-${project.id}-${num}" src="${acf[`portfolio_image_portrait_${num}`].sizes.thumbnail}" alt="thumbnail from ${project.title.rendered} project" /></div>` 
       } else {
-        newThumbs = newThumbs + `<div class="project-thumb" id="project-thumb-${project.id}-${num}"><div class="thumb-overlay" id="project-thumb-overlay-${project.id}-${num}"></div><img class="project-thumb-image" id="project-thumb-image-${project.id}-${num}" src="${acf[`portfolio_thumbnail_${num}`].sizes.thumbnail}" alt="thumbnail from ${project.title.rendered} project" /></div>`
+        if (acf[`portfolio_thumbnail_${num}`] !== false) {
+          newThumbs = newThumbs + `<div class="project-thumb" id="project-thumb-${project.id}-${num}"><div class="thumb-overlay" id="project-thumb-overlay-${project.id}-${num}"></div><img class="project-thumb-image" id="project-thumb-image-${project.id}-${num}" src="${acf[`portfolio_thumbnail_${num}`].sizes.thumbnail}" alt="thumbnail from ${project.title.rendered} project" /></div>`
+        } else {
+          newThumbs = newThumbs + `<div class="project-thumb" id="project-thumb-${project.id}-${num}"><div class="thumb-overlay" id="project-thumb-overlay-${project.id}-${num}"></div><img class="project-thumb-image" id="project-thumb-image-${project.id}-${num}" src="https://www.tlbx.app/200-300.svg" alt="thumbnail from ${project.title.rendered} project" /></div>`
+        }
       }
     } else {
       if (acf[`portfolio_image_landscape_${num}`] !== false) {
         newThumbs = newThumbs + `<div class="project-thumb" id="project-thumb-${project.id}-${num}"><div class="thumb-overlay" id="project-thumb-overlay-${project.id}-${num}"></div><img class="project-thumb-image" id="project-thumb-image-${project.id}-${num}" src="${acf[`portfolio_image_landscape_${num}`].sizes.thumbnail}" alt="thumbnail from ${project.title.rendered} project" /></div>` 
       } else {
-        newThumbs = newThumbs + `<div class="project-thumb" id="project-thumb-${project.id}-${num}"><div class="thumb-overlay" id="project-thumb-overlay-${project.id}-${num}"></div><img class="project-thumb-image" id="project-thumb-image-${project.id}-${num}" src="${acf[`portfolio_thumbnail_${num}`].sizes.thumbnail}" alt="thumbnail from ${project.title.rendered} project" /></div>`
+        if (acf[`portfolio_thumbnail_${num}`] !== false) {
+          newThumbs = newThumbs + `<div class="project-thumb" id="project-thumb-${project.id}-${num}"><div class="thumb-overlay" id="project-thumb-overlay-${project.id}-${num}"></div><img class="project-thumb-image" id="project-thumb-image-${project.id}-${num}" src="${acf[`portfolio_thumbnail_${num}`].sizes.thumbnail}" alt="thumbnail from ${project.title.rendered} project" /></div>`
+        } else {
+          newThumbs = newThumbs + `<div class="project-thumb" id="project-thumb-${project.id}-${num}"><div class="thumb-overlay" id="project-thumb-overlay-${project.id}-${num}"></div><img class="project-thumb-image" id="project-thumb-image-${project.id}-${num}" src="https://www.tlbx.app/200-300.svg" alt="thumbnail from ${project.title.rendered} project" /></div>`
+        } 
       }
     }
   })

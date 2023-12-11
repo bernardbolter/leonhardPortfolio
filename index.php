@@ -29,7 +29,6 @@ if (isset($_GET['link']) && $_GET['link'] == true) {
 } 
 ?>
 
-<?php $window_width = "<script type='text/javascript'>document.write(window.innerWidth);</script>"; ?>
 
 <?php get_template_part("nav"); ?>
 

@@ -12,13 +12,10 @@ get_header(); ?>
     <input type="hidden" id="post_id" value="<?php the_ID() ?>">
         <div id="projects-container">
             <div class="project-container">
-                <a href="/?link=true" class="project-back">
-                    <svg viewBox="0 0 42 42">
-                        <circle class="back-circle" cx="21" cy="21" r="21" />
-                        <path d="M24 13L16 21L24 29" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </a>
-                <div id="project-title" class="project-title">
+                <div class="logo-icon">
+                    <img src="<?php echo get_template_directory_uri(); ?>/img/logo_still.png" alt ="Leonhard Logo" />
+                </div>
+                <div id="project-title-loading" class="project-title-loading">
                     <h1>loading...</h1>
                 </div>
                 <div id="project-thumbnails" class="project-thumbnails projetc-thumbs-loading">
@@ -28,9 +25,20 @@ get_header(); ?>
                 </div>
             </div>
             <div class="loading-container">
-               
+                <?php if (have_posts()) : while (have_posts()) : the_post() ?>
+                    <?php $check_image = get_field('portfolio_image_landscape_1') ?>
+                    <?php 
+                        if ($check_image) {
+                        $thumb_url = $check_image['sizes']['thumbnail']
+                    ?>
+                        <img src="<?php echo $thumb_url ?>" alt="loading image for project"/>
+                    <?php
+                    }
+                    ?>
+                <?php endwhile; endif; ?>
             </div>
         </div>
     </div>
 
+<?php get_template_part("about"); ?>
 <?php get_footer(); ?>

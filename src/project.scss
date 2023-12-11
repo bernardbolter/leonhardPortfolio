@@ -18,16 +18,102 @@
     margin: 10px 0 0 10px;
 }
 
-.project-back {
-    width: 35px;
-    height: 35px;
-    top: 10px;
-    left: 10px;
+.project-logo {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    z-index: 300;
+
+    img {
+        width: 100%;
+    }
+}
+
+.project-buttons-container {
     position: absolute;
     z-index: 300;
+    top: 85px;
+    left: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.project-name {
+    background: $info-back;
+    border-radius: 20px;
+    color: white;
+    font-weight: 400;
+    font-size: 15px;
+    margin: 0 7px 0 0;
+    padding: 10px 14px;
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    white-space: nowrap;
+    cursor: pointer;
+    transform: scale(1);
+    transition: all .2s ease-in-out;
+
+    &:hover {
+        transform: scale(1.05);
+        transition: all .2s ease-in-out; 
+    }
+}
+
+.project-name-hide {
+    display: none;
+}
+
+.name-close {
+    width: 39px;
+    height: 39px;
+    margin: 0 7px 0 0;
+    background: $info-back;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    z-index: 999;
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    transform: scale(1);
+    transition: all .2s ease-in-out;
+
+    &:hover {
+        transform: scale(1.05);
+        transition: all .2s ease-in-out; 
+    }
+
+    svg {
+        width: 50%;
+        fill: white;
+    }
+}
+
+.name-close-hide {
+    display: none;
+}
+
+.project-back {
+    width: 39px;
+    height: 39px;
+    margin: 0 7px 0 0;
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border-radius: 50%;
+    background: $info-back;
+    transform: scale(1);
+    transition: all .2s ease-in-out;
+
+    &:hover {
+        transform: scale(1.1);
+        transition: all .2s ease-in-out; 
+    }
 
     svg {
         width: 100%;
@@ -40,24 +126,28 @@
 }
 
 .project-title {
-    height: 35px;
+    height: 39px;
     padding: 0 14px;
+    margin: 0 10px 0 0;
     background: $info-back;
     border-radius: 18px;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    position: absolute;
-    z-index: 300;
-    top: 10px;
-    left: 52px;
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     font-family: $font;
     font-size: 16px;
     color: white;
-    font-weight: 400; 
+    font-weight: 400;
+    transform: scale(1);
+    transition: all .2s ease-in-out;
+
+    &:hover {
+        transform: scale(1.05);
+        transition: all .2s ease-in-out; 
+    }
      
     h1 {
         font-family: $font;
@@ -70,6 +160,42 @@
 
 .project-title-hide {
     display: none;
+}
+
+.project-title-loading {
+    height: 39px;
+    padding: 0 14px;
+    margin: 0 10px 0 0;
+    position: absolute;
+    left: 10px;
+    top: 85px;
+    background: $info-back;
+    border-radius: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    font-family: $font;
+    font-size: 16px;
+    color: white;
+    font-weight: 400;
+    transform: scale(1);
+    transition: all .2s ease-in-out;
+
+    &:hover {
+        transform: scale(1.05);
+        transition: all .2s ease-in-out; 
+    }
+     
+    h1 {
+        font-family: $font;
+        font-size: 17px;
+        color: white;
+        font-weight: 400;
+        letter-spacing: 0.05em;  
+    } 
 }
 
 .project-thumbnails {
@@ -87,11 +213,15 @@
     @media screen and (min-width: $breakpoint) {
         flex-direction: row;
         bottom: auto;
-        top: 10px;
-        left: 185px;
+        top: 133px;
+        left: 10px !important;
         bottom: auto;
         right: auto;
     }
+}
+
+.project-thumbnails-hide {
+    display: none;
 }
 
 .project-thumb {
@@ -144,8 +274,8 @@
 }
 
 .project-thumb-loader {
-    width: 35px;
-    height: 35px;
+    width: 39px;
+    height: 39px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -166,10 +296,14 @@
 .projetc-thumbs-loading {
     left: auto;
     @media screen and (min-width: $breakpoint) {
-        left: 159px !important;
+        left: 116px !important;
+        top: 85px !important;
     }
 }
 
+.about-project {
+    top: 131px !important;
+}
 
 .project-info-container {
     width: 85%;
@@ -179,7 +313,7 @@
     background: $info-back;
     position: absolute;
     left: 10px;
-    top: 55px;
+    top: 131px;
     border-radius: 15px;
     max-width: 400px;
     padding: 10px 5px 20px;
@@ -223,19 +357,31 @@
 }
 
 .project-info-close {
-    width: 18px;
-    height: 18px;
-    border-radius: 21px;
+    width: 39px;
+    height: 39px;
+    margin: 0 7px 0 0;
+    background: $info-back;
+    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: $info-back;
     cursor: pointer;
-    padding: 9px;
-    position: absolute;
-    z-index: 300;
-    top: 10px;
-    left: 52px;
+    position: relative;
+    z-index: 999;
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    transform: scale(1);
+    transition: all .2s ease-in-out;
+
+    &:hover {
+        transform: scale(1.05);
+        transition: all .2s ease-in-out; 
+    }
+
+    svg {
+        width: 50%;
+        fill: white;
+    }
 }
 
 .project-info-close-path {
