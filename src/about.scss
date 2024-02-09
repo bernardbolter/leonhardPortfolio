@@ -1,10 +1,10 @@
 .about-container {
     width: 85%;
-    max-height: calc(100vh - 188px);
+    max-height: calc(100vh - 98px);
     overflow: scroll;
     background: $info-back;
-    position: absolute;
-    top: 143px;
+    position: fixed;
+    top: 58px;
     left: 10px;
     border-radius: 15px;
     max-width: 400px;
@@ -17,6 +17,7 @@
     backdrop-filter: blur(20px);
     overflow: scroll;
     overflow-x: hidden;
+    scrollbar-width: none;
 
     @media screen and (min-width: $breakpoint) {
         width: 400px;
@@ -36,11 +37,11 @@
         font-size: 13px;
         font-weight: 400px;
         line-height: 1.4em;
-        color: $white-light;
+        color: #bbb;
         margin: 0 0 25px 10px;
     }
 
-    a {
+    .imprint {
         font-size: 13px;
         font-weight: 400;
         margin: 20px 0 10px 10px;
@@ -56,6 +57,19 @@
             opacity: 1;
             transition: all .5s ease-in-out;
         }
+    }
+}
+
+.about-email {
+    color: white;
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 13px;
+    margin: 0 0 0 10px;
+    padding: 0;
+
+    &:hover {
+        text-decoration: underline;
     }
 }
 
@@ -103,3 +117,13 @@
 .office-times {
     margin: 0 0 0 10px !important;
 }
+
+.audio-files {
+    display: none;
+    
+}
+
+/*kill the transitions on any descendant elements of .notransition*/
+.notransition * { 
+    transition: none !important; 
+} 

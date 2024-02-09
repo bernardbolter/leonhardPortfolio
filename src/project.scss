@@ -19,11 +19,11 @@
 }
 
 .project-logo {
-    width: 80px;
-    height: 80px;
+    width: 45px;
+    height: 45px;
     position: absolute;
-    top: 5px;
-    left: 5px;
+    top: 7px;
+    left: 7px;
     z-index: 300;
 
     img {
@@ -34,7 +34,7 @@
 .project-buttons-container {
     position: absolute;
     z-index: 300;
-    top: 85px;
+    top: 60px;
     left: 10px;
     display: flex;
     flex-direction: row;
@@ -49,13 +49,17 @@
     font-weight: 400;
     font-size: 15px;
     margin: 0 7px 0 0;
-    padding: 10px 14px;
+    padding: 0 14px;
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     white-space: nowrap;
     cursor: pointer;
     transform: scale(1);
     transition: all .2s ease-in-out;
+    height: 39px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     &:hover {
         transform: scale(1.05);
@@ -65,6 +69,14 @@
 
 .project-name-hide {
     display: none;
+}
+
+.project-name-loading {
+    transform: scale(1);
+
+    &:hover {
+        transform: scale(1) !important;
+    }
 }
 
 .name-close {
@@ -79,8 +91,8 @@
     cursor: pointer;
     position: relative;
     z-index: 999;
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
+    // -webkit-backdrop-filter: blur(20px);
+    // backdrop-filter: blur(20px);
     transform: scale(1);
     transition: all .2s ease-in-out;
 
@@ -121,6 +133,7 @@
     }
 }
 
+
 .back-circle {
     fill: $info-back;
 }
@@ -138,11 +151,12 @@
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     font-family: $font;
-    font-size: 16px;
+    font-size: 15px;
     color: white;
     font-weight: 400;
     transform: scale(1);
     transition: all .2s ease-in-out;
+    white-space: nowrap;
 
     &:hover {
         transform: scale(1.05);
@@ -164,15 +178,15 @@
 
 .project-title-loading {
     height: 39px;
-    padding: 0 14px;
+    width: 70px;
+    padding: 0 14px 0 21px;
     margin: 0 10px 0 0;
-    position: absolute;
     left: 10px;
-    top: 85px;
+    top: 60px;
     background: $info-back;
     border-radius: 18px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     cursor: pointer;
     -webkit-backdrop-filter: blur(20px);
@@ -183,19 +197,27 @@
     font-weight: 400;
     transform: scale(1);
     transition: all .2s ease-in-out;
-
-    &:hover {
-        transform: scale(1.05);
-        transition: all .2s ease-in-out; 
-    }
+    text-decoration: none;
      
     h1 {
         font-family: $font;
-        font-size: 17px;
+        font-size: 14px;
         color: white;
         font-weight: 400;
         letter-spacing: 0.05em;  
     } 
+}
+
+.logo-icon-loading {
+    width: 45px;
+    height: 45px;
+    position: absolute;
+    top: 7px;
+    left: 7px;
+
+    img {
+        width: 100%;
+    }
 }
 
 .project-thumbnails {
@@ -213,7 +235,7 @@
     @media screen and (min-width: $breakpoint) {
         flex-direction: row;
         bottom: auto;
-        top: 133px;
+        top: 109px;
         left: 10px !important;
         bottom: auto;
         right: auto;
@@ -228,16 +250,30 @@
     width: 35px;
     height: 35px;
     margin:  5px 0 0 0;
+    transform: scale(1);
+    transition: all .2s ease-in-out;
 
     @media screen and (min-width: $breakpoint) {
         margin: 0 7px 10px 0;
-        width: 35px;
-        height: 35px;
+        width: 39px;
+        height: 39px;
     }
 
     img {
-        width: 100%;
+        width: 35px;
+        height: 35px;
         border-radius: 50%;
+        object-fit: cover;
+
+        @media screen and (min-width: $breakpoint) {
+            width: 39px;
+            height: 39px;
+        }
+    }
+
+    &:hover {
+        transform: scale(1.1);
+        transition: all .2s ease-in-out;
     }
 }
 
@@ -262,8 +298,8 @@
     mask-position: 100% 100%;
 
     @media screen and (min-width: $breakpoint) {
-        width: 35px;
-        height: 35px;
+        width: 39px;
+        height: 39px;
     }
 }
 
@@ -271,6 +307,12 @@
     mask-position: 100% 100%;
     -webkit-mask-position: 0% 0%;
     // transition: 4s;
+}
+
+.thumb-overlay-done {
+    mask-position: 100% 100%;
+    -webkit-mask-position: 0% 0%;
+    transition: none !important;
 }
 
 .project-thumb-loader {
@@ -282,6 +324,8 @@
     background: $info-back;
     border-radius: 21px;
     margin: 7px 0 0 0;
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
 
     @media screen and (min-width: $breakpoint) {
         margin:  0 0 0 7px;
@@ -297,32 +341,33 @@
     left: auto;
     @media screen and (min-width: $breakpoint) {
         left: 116px !important;
-        top: 85px !important;
+        top: 60px !important;
     }
 }
 
 .about-project {
-    top: 131px !important;
+    top: 103px !important;
 }
 
 .project-info-container {
     width: 85%;
-    max-height: calc(100vh - 100px);
+    max-height: calc(100vh - 150px);
     overflow: scroll;
     overflow-x: hidden;
     background: $info-back;
     position: absolute;
     left: 10px;
-    top: 131px;
+    top: 109px;
     border-radius: 15px;
     max-width: 400px;
-    padding: 10px 5px 20px;
+    padding: 15px;
     z-index: 999;
     opacity: 1;
     visibility: visible;
     transition: z-index .7s step-start, visibility 0s, opacity .7s ease-in-out;
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
+    scrollbar-width: none;
 
     h1 {
         color: white !important;
@@ -337,14 +382,14 @@
         color: white;
         font-size: 13px;
         font-weight: 400;
-        margin: 10px 10px 0;
+        margin: 0 10px 0;
         padding: 0;
     }
 
     p {
         font-size: 13px;
         font-weight: 400;
-        color: $white-light;
+        color: #999;
         margin: 0 0 25px 10px;
     }
 }
@@ -368,8 +413,8 @@
     cursor: pointer;
     position: relative;
     z-index: 999;
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
+    // -webkit-backdrop-filter: blur(20px);
+    // backdrop-filter: blur(20px);
     transform: scale(1);
     transition: all .2s ease-in-out;
 
@@ -394,7 +439,6 @@
 
 #projects-container {
     width: 100vw;
-    height: 100vh;
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
     -webkit-scroll-snap-type: y mandatory;
@@ -412,17 +456,21 @@
     scroll-snap-align: start;
     -webkit-scroll-snap-stop: normal;
     scroll-snap-stop: normal;
+    z-index: 200;
 }
 
 .project-images {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    position: absolute;
+    position: fixed;
+    z-index: 200;
     width: 100%;
     height: 100vh;
-    transition: all 1s;
+    // transition: all 1s;
     width: 3000px;
+    left: 0;
+    top: 0;
 }
 
 .project-image {
@@ -431,9 +479,9 @@
     object-fit: cover;
 
     video {
-        width: 100vw;
+        width: 100%;
         height: 100vh;
-        object-fit: cover;
+        object-fit: fill;
     }
 
     img {
@@ -460,4 +508,88 @@
   .project-image.is-loaded {
     filter: none; /* remove the blur on fullres image */
     transition: filter 1s;
+  }
+
+  // INVISIBLE NAVIGATION
+
+  .invisible-click-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    display: none;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    @media screen and (min-width: $breakpoint) {
+        display: flex;
+    }
+  }
+
+  .invisible-click-container-hide {
+    display: none;
+  }
+
+  .invisible-click-left {
+    width: 39px;
+    height: 39px;
+    margin: 0;
+    padding: 0;
+    z-index: 1001;
+    cursor: pointer;
+    left: 10px;
+    position: absolute;
+    transform: scale(1);
+    transition: all .2s ease-in-out;
+
+    &:hover {
+        transform: scale(1.05);
+        transition: all .2s ease-in-out; 
+    }
+
+    img {
+        width: 100%;
+    }
+  }
+
+  .invisible-click-right {
+    width: 39px;
+    height: 39px;
+    margin: 0;
+    padding: 0;
+    z-index: 1001;
+    cursor: pointer;
+    right: 10px;
+    position: absolute;
+    transform: scale(1) rotate(180deg);
+    transition: all .2s ease-in-out;
+
+    &:hover {
+        transform: scale(1.05) rotate(180deg);
+        transition: all .2s ease-in-out; 
+    }
+
+    img {
+        width: 100%;
+    }
+  }
+
+  // PROJECT PLACEHOLDER
+
+  .project-container-placeholder {
+    width: 100%;
+    height: 100vh;
+    display: block;
+  }
+
+  .project-container-placeholder-hide {
+    display: none;
+  }
+
+  .audio-container {
+    display: none;
   }

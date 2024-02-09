@@ -1,6 +1,7 @@
 jQuery(document).ready(function($) {
     clockUpdate()
     setInterval(clockUpdate, 1000);
+    dots();
 });
 
 function clockUpdate() {
@@ -36,4 +37,22 @@ function clockUpdate() {
       var s = addZero(date.getSeconds())
 
       jQuery("#clock").text(h + ':' + m + ':' + s)
+      jQuery(".clock").text(h + ':' + m + ':' + s)
+}
+
+var theDots = '...'
+var i = 0;
+
+function dots() {
+  if (document.getElementById('loading-dots')) {
+    if (i < theDots.length) {
+      document.getElementById('loading-dots').innerHTML += theDots.charAt(i)
+      i++;
+      setTimeout(dots, 500)
+    } else {
+      i = 0
+      document.getElementById('loading-dots').innerHTML = ''
+      setTimeout(dots, 500)
+    }
+  }
 }

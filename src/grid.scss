@@ -12,6 +12,10 @@
     }
 }
 
+.post-container video.poster {
+    filter: blur(10px);
+}
+
 
 .landscape {
     grid-column: span 2;
@@ -34,10 +38,10 @@
 }
 
 .post-container {
-    display: block;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 
     opacity: .85;
     transition: opacity .5s ease-in-out;
@@ -63,5 +67,42 @@
         height: 100%;
         object-fit: cover;
         pointer-events: none;
+
+        .poster {
+            filter: blur(100px);
+        }
     }
+}
+
+.post-container .overview-tooltip {
+    visibility: hidden;
+    width: 120px;
+    background: $background;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3px 7px;
+    color: $nav-back;
+    position: absolute;
+    z-index: 2001;
+    transition: all .3s ease-in-out;
+}
+
+.post-container:hover .overview-tooltip {
+    visibility: visible;
+    transition: all .3s ease-in-out;
+}
+
+.suspended-video-image {
+    position: absolute;
+    z-index: 1001;
+    display: none;
+}
+
+.suspended-video-image-show {
+    display: block;
+}
+
+#overview_hidden_video {
+    display: none;
 }

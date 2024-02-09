@@ -6,6 +6,7 @@ function add_theme_scripts() {
 	wp_enqueue_style( 'main', get_template_directory_uri() . '/style.css' );
 	wp_enqueue_style( 'custom', get_template_directory_uri() . '/custom3.css?v=1002' );
 	wp_enqueue_script( 'script', get_template_directory_uri() . '/js/bundle.js', array( 'jquery' ), 1.1, true );
+	wp_enqueue_script( 'a-frame', 'https://aframe.io/releases/1.5.0/aframe.min.js', false );
 }
 add_action( 'wp_enqueue_scripts', 'add_theme_scripts' );
 

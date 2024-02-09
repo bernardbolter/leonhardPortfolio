@@ -5,6 +5,8 @@
  * @package WordPress
  * @subpackage LeonhardPortfolio
  */
+
+ $window_width = "<script type='text/javascript'>document.write(window.innerWidth);</script>";
  
 get_header(); ?>
  
@@ -12,33 +14,39 @@ get_header(); ?>
     <input type="hidden" id="post_id" value="<?php the_ID() ?>">
         <div id="projects-container">
             <div class="project-container">
-                <div class="logo-icon">
+                <a href="/" class="logo-icon-loading">
                     <img src="<?php echo get_template_directory_uri(); ?>/img/logo_still.png" alt ="Leonhard Logo" />
-                </div>
-                <div id="project-title-loading" class="project-title-loading">
-                    <h1>loading...</h1>
-                </div>
-                <div id="project-thumbnails" class="project-thumbnails projetc-thumbs-loading">
-                    <div class="project-thumb-loader"></div>
-                    <div class="project-thumb-loader"> </div>
-                    <div class="project-thumb-loader"> </div>
+                </a>
+                <div class="project-buttons-container">
+                    <a href="/" id="project-title-loading" class="project-title-loading">
+                        <h1>Loading<span id="loading-dots"></span></h1>
+                    </a>
                 </div>
             </div>
             <div class="loading-container">
                 <?php if (have_posts()) : while (have_posts()) : the_post() ?>
-                    <?php $check_image = get_field('portfolio_image_landscape_1') ?>
+                    <?php $load_landscape = get_field('loading_image_landscape') ?>
+                    <?php $load_portrait = get_field('loading_image_portrait') ?>
                     <?php 
-                        if ($check_image) {
-                        $thumb_url = $check_image['sizes']['thumbnail']
+                        if ($window_width < 850) {
+                            if ($load_landscape) {
+                                $thumb_url = $load_landscape['sizes']['thumbnail'];
+                            } else {
+                                $thumb_url = 'https://www.tlbx.app/200-300.svg';
+                            }
+                        } else {
+                            if ($load_portrait) {
+                                $thumb_url = $load_portrait['sizes']['thumbnail'];
+                            } else {
+                                $thumb_url = 'https://www.tlbx.app/200-300.svg';
+                            }
+                        }
                     ?>
                         <img src="<?php echo $thumb_url ?>" alt="loading image for project"/>
-                    <?php
-                    }
-                    ?>
                 <?php endwhile; endif; ?>
             </div>
         </div>
     </div>
 
-<?php get_template_part("about"); ?>
+<?php get_template_part("audio"); ?>
 <?php get_footer(); ?>

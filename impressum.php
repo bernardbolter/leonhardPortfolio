@@ -17,13 +17,20 @@
 
 get_header(); 
 ?>
+<div class="imp-background"></div>
 <section class="impressum-container">
-    <a href="/?link=true" class="imp-back">
-        <svg viewBox="0 0 42 42">
-            <circle class="back-circle" cx="21" cy="21" r="21" />
-            <path d="M24 13L16 21L24 29" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-    </a>
+    <div class="imp-nav">
+        <a href="/" class="logo-icon-loading">
+            <img src="<?php echo get_template_directory_uri(); ?>/img/logo_still.png" alt ="Leonhard Logo" />
+        </a>
+        <div class="project-buttons-container">
+            <a href="/" class="imp-close">
+                <img src="<?php echo get_template_directory_uri(); ?>/img/cross.png" alt="back button" />
+            </a>
+            <!-- <h1 class="project-name project-name-loading">Leanhard Laupichler</h1> -->
+        </div>
+    </div>
+
     <?php
     wp_reset_query(); // necessary to reset query
     while ( have_posts() ) : the_post();

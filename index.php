@@ -17,27 +17,20 @@
 get_header(); 
 ?>
 
-<?php 
-if (isset($_GET['link']) && $_GET['link'] == true) {
-    echo '';
-} else {
-?>
-    <div class="splash-container">
-        <h1>Leonhard Laupichler</h1>
-    </div>
-<?php
-} 
-?>
-
 
 <?php get_template_part("nav"); ?>
 
 <?php get_template_part("about"); ?>
 
+<video src="<?php bloginfo('template_directory'); ?>/img/overview_hidden_video.mp4" id="overview_hidden_video" muted loop playsinline autoplay ></video>
+
 <div id="posts">
     <div class="loading-container">
+        <video src="<?php bloginfo('template_directory'); ?>/logo/leo_logo.mp4" muted loop playsinline autoplay ></video>
     </div>
 </div>
+
+<?php get_template_part("audio"); ?>
 
 <?php
 get_footer();

@@ -12,10 +12,7 @@
 
 ?>
 
-<nav class="nav-container">
-    <div class="logo-icon">
-        <img src="<?php echo get_template_directory_uri(); ?>/img/logo_still.png" alt ="Leonhard Logo" />
-    </div>
-    <h1 id="about"class="name-top about-icon">Leanhard Laupichler</h1>
+<nav class="nav-container nav-container-hide" id="nav-container">
+    <h1 id="about" class="name-top about-icon play-leo">Leonhard Laupichler</h1>
     <div id="about-close" class="nav-icons nav-icons-close about-icon"><img src="<?php echo get_template_directory_uri(); ?>/img/close.png" alt ="close icon" /></div>
 </nav>
